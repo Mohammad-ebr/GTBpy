@@ -1,0 +1,964 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bubble_indicators &mdash; GTBpy Documentation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            GTBpy Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../modules.html">GTBpy</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">GTBpy Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Module code</a></li>
+      <li class="breadcrumb-item active">bubble_indicators</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for bubble_indicators</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Bubble tests from the following papers:</span>
+<span class="sd">- PWY (SADF test): Phillips, Wu and Yu (2011)</span>
+<span class="sd">- PSY (GSADF test): Phillips, Shi and Yu (2015)</span>
+<span class="sd">- WHL: Whitehouse, Harvey and Leybourne (2022)</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numba</span> <span class="kn">import</span> <span class="n">njit</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">statsmodels.tsa.stattools</span> <span class="kn">import</span> <span class="n">adfuller</span>
+
+
+<span class="c1">#%%</span>
+<span class="k">def</span> <span class="nf">ADF_FL</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">adflag</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">adfuller</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">maxlag</span><span class="o">=</span><span class="n">adflag</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="n">regression</span><span class="p">,</span> <span class="n">autolag</span><span class="o">=</span><span class="kc">None</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1">#%%</span>
+<span class="nd">@njit</span>
+<span class="k">def</span> <span class="nf">ADF_FL_njit</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">adflag</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">):</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">t1</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">const</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">t1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">trend</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">t1</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="n">x</span> <span class="o">=</span> <span class="n">y</span><span class="p">[:</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">regression</span> <span class="o">==</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">const</span><span class="p">))</span>
+    <span class="k">elif</span> <span class="n">regression</span> <span class="o">==</span> <span class="s1">&#39;ct&#39;</span><span class="p">:</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x</span><span class="p">,</span> <span class="n">const</span><span class="p">,</span> <span class="n">trend</span><span class="p">))</span>
+    
+    <span class="n">t2</span> <span class="o">=</span> <span class="n">t1</span> <span class="o">-</span> <span class="n">adflag</span>
+    <span class="n">x2</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="n">t2</span><span class="p">:]</span>
+    <span class="n">dy01</span> <span class="o">=</span> <span class="n">dy</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">dy</span><span class="p">)</span><span class="o">-</span><span class="n">t2</span><span class="p">:]</span>
+    
+    <span class="k">if</span> <span class="n">adflag</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">adflag</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">x2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">((</span><span class="n">x2</span><span class="p">,</span> <span class="n">dy</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">dy</span><span class="p">)</span> <span class="o">-</span><span class="n">t2</span> <span class="o">-</span><span class="n">j</span> <span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">dy</span><span class="p">)</span> <span class="o">-</span><span class="n">j</span><span class="p">]))</span>
+    
+    <span class="n">beta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">x2</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">x2</span><span class="p">)</span> <span class="o">@</span> <span class="p">(</span><span class="n">x2</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">dy01</span><span class="p">)</span>
+    <span class="n">eps</span> <span class="o">=</span> <span class="n">dy01</span> <span class="o">-</span> <span class="n">x2</span> <span class="o">@</span> <span class="n">beta</span>
+    
+    <span class="k">if</span> <span class="n">regression</span> <span class="o">==</span> <span class="s1">&#39;n&#39;</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">regression</span> <span class="o">==</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">regression</span> <span class="o">==</span> <span class="s1">&#39;ct&#39;</span><span class="p">:</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">3</span>
+    
+    <span class="n">sig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diag</span><span class="p">((</span><span class="n">eps</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">eps</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">t2</span> <span class="o">-</span> <span class="n">adflag</span> <span class="o">-</span> <span class="n">k</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">x2</span><span class="o">.</span><span class="n">T</span> <span class="o">@</span> <span class="n">x2</span><span class="p">)))</span>
+    <span class="n">tvalue</span> <span class="o">=</span> <span class="n">beta</span> <span class="o">/</span> <span class="n">sig</span>
+
+    <span class="k">return</span> <span class="n">tvalue</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="c1">#%%</span>
+<span class="k">def</span> <span class="nf">bubbles</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">cv</span><span class="p">):</span>
+    <span class="c1"># Boolean mask where Stat &gt; Critical value</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">stat</span> <span class="o">&gt;</span> <span class="n">cv</span>
+
+    <span class="c1"># Find periods where mask is True</span>
+    <span class="n">periods</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">start_date</span> <span class="o">=</span> <span class="kc">None</span>
+    
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)):</span>
+        <span class="n">current_date</span> <span class="o">=</span> <span class="n">stat</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        
+        <span class="k">if</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># Start of a new period</span>
+            <span class="n">start_date</span> <span class="o">=</span> <span class="n">current_date</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">and</span> <span class="n">start_date</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># End of the current period</span>
+            <span class="n">periods</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">start_date</span><span class="p">,</span> <span class="n">current_date</span><span class="p">])</span>
+            <span class="n">start_date</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
+            <span class="c1"># Special case for when the period extends to the last row</span>
+            <span class="n">periods</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">start_date</span><span class="p">,</span> <span class="n">current_date</span><span class="p">])</span>
+    
+    <span class="c1"># Create the result DataFrame with the periods</span>
+    <span class="n">bubbles</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">periods</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;bubble_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">periods</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)],</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Start Date&#39;</span><span class="p">,</span> <span class="s1">&#39;End Date&#39;</span><span class="p">])</span>
+    
+    <span class="k">return</span> <span class="n">bubbles</span>
+
+<span class="c1">#%%</span>
+<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="p">,</span> <span class="n">cv</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">stat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+    <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">cv</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">test_qe</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1"> </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">test_qe</span><span class="si">}</span><span class="s1"> critical values&#39;</span><span class="p">)</span> <span class="c1">#  marker=&#39;.&#39;,</span>
+    
+    <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axs</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bubbles_df</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">axvspan</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bubbles_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;Start Date&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bubbles_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;End Date&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+            
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="PWY_SADF">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.PWY_SADF">[docs]</a>
+<span class="k">class</span> <span class="nc">PWY_SADF</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implements the Supremum Augmented Dickey-Fuller (SADF) test, based on Phillips, Wu, and Yu (2011),</span>
+<span class="sd">    to detect and date-stamp speculative bubbles in time series data.</span>
+
+<span class="sd">    The PWY SADF test is an extension of the ADF test, where recursive right-tailed ADF tests are performed </span>
+<span class="sd">    on expanding subsamples of the data. The test identifies periods when the test statistic exceeds a critical </span>
+<span class="sd">    value, which can be interpreted as evidence of bubble-like behavior.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : pandas.Series, optional</span>
+<span class="sd">        Time series data on which the SADF test will be performed.</span>
+<span class="sd">    swindow0 : int, optional</span>
+<span class="sd">        Minimum window size for the recursive ADF tests. If not provided, it defaults to </span>
+<span class="sd">        `int(T * (0.01 + 1.8 / np.sqrt(T)))`, where `T` is the length of `y`.</span>
+<span class="sd">    adflag : int, default=1</span>
+<span class="sd">        The lag length for the ADF test.</span>
+<span class="sd">    regression : {&#39;c&#39;, &#39;ct&#39;, &#39;n&#39;}, default=&#39;c&#39;</span>
+<span class="sd">        Type of deterministic term included in the ADF test:</span>
+<span class="sd">        - &#39;c&#39; : constant.</span>
+<span class="sd">        - &#39;ct&#39;: constant and trend.</span>
+<span class="sd">        - &#39;n&#39; : no deterministic terms.</span>
+<span class="sd">    njit : bool, default=False</span>
+<span class="sd">        If True, uses a Numba-optimized version of the ADF test to speed up computation.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : pandas.Series</span>
+<span class="sd">        The input time series data.</span>
+<span class="sd">    T : int</span>
+<span class="sd">        Length of the input time series.</span>
+<span class="sd">    swindow0 : int</span>
+<span class="sd">        The minimum window size used in recursive ADF tests.</span>
+<span class="sd">    adflag : int</span>
+<span class="sd">        The number of lags used in the ADF test.</span>
+<span class="sd">    regression : str</span>
+<span class="sd">        Type of regression term used in the ADF test (&#39;c&#39;, &#39;ct&#39;, or &#39;n&#39;).</span>
+<span class="sd">    ADF : callable</span>
+<span class="sd">        The function used to compute the ADF statistic. Either `ADF_FL` or `ADF_FL_njit` depending </span>
+<span class="sd">        on the `njit` parameter.</span>
+<span class="sd">    sadf : float</span>
+<span class="sd">        The supremum ADF statistic computed from the recursive ADF tests.</span>
+<span class="sd">    badfs : pandas.Series</span>
+<span class="sd">        The ADF statistics computed for each subsample, indexed by time.</span>
+<span class="sd">    cv_sadf : numpy.ndarray</span>
+<span class="sd">        Critical values for the SADF statistic at specified quantiles.</span>
+<span class="sd">    cv_badfs : pandas.DataFrame</span>
+<span class="sd">        Critical values for the badfs statistics at specified quantiles.</span>
+<span class="sd">    bubbles_df : pandas.DataFrame</span>
+<span class="sd">        Identified bubble periods, with start and end dates for each bubble.</span>
+<span class="sd">    test_qe : float</span>
+<span class="sd">        Quantile used to test for bubbles in the `bubbles` method.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    stats()</span>
+<span class="sd">        Computes the SADF statistic and the ADF statistics for each subsample.</span>
+<span class="sd">    critical_values(T=None, cv_qes=[0.9, 0.95, 0.99], m=2000, seed=1)</span>
+<span class="sd">        Simulates critical values for the SADF and badfs statistics based on Monte Carlo simulations.</span>
+<span class="sd">    bubbles(test_qe)</span>
+<span class="sd">        Identifies bubble periods where the SADF statistic exceeds the critical values for the given quantile.</span>
+<span class="sd">    plot()</span>
+<span class="sd">        Plots the time series, SADF statistics, critical values, and highlights bubble periods.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Phillips, P. C., Wu, Y., &amp; Yu, J. (2011). Explosive behavior in the 1990s NASDAQ: When did exuberance escalate asset values?.</span>
+<span class="sd">    International Economic Review, 52(1), 201-226.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; pw_sadf = PWY_SADF(y=price_series, swindow0=30, adflag=1, regression=&#39;c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; sadf_stat, badfs_stats = pw_sadf.stats()  # Compute the SADF statistics</span>
+<span class="sd">    &gt;&gt;&gt; cv_sadf, cv_badfs = pw_sadf.critical_values(cv_qes=[0.95, 0.99], m=1000, seed=42)  # Simulate critical values</span>
+<span class="sd">    &gt;&gt;&gt; bubbles_df = pw_sadf.bubbles(test_qe=0.95)  # Identify bubble periods</span>
+<span class="sd">    &gt;&gt;&gt; pw_sadf.plot()  # Plot the results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">njit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span> <span class="o">=</span> <span class="n">swindow0</span> <span class="k">if</span> <span class="n">swindow0</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.01</span> <span class="o">+</span> <span class="mf">1.8</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adflag</span> <span class="o">=</span> <span class="n">adflag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regression</span> <span class="o">=</span> <span class="n">regression</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ADF</span> <span class="o">=</span> <span class="n">ADF_FL_njit</span> <span class="k">if</span> <span class="n">njit</span> <span class="k">else</span> <span class="n">ADF_FL</span>
+    
+<div class="viewcode-block" id="PWY_SADF.stats">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.PWY_SADF.stats">[docs]</a>
+    <span class="k">def</span> <span class="nf">stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Calculates the Supremum Augmented Dickey-Fuller (SADF) test statistic over expanding windows.</span>
+
+<span class="sd">        This method performs a recursive ADF test using expanding sample windows starting from the </span>
+<span class="sd">        initial window size `swindow0` up to the total length of the time series `T`. For each window, </span>
+<span class="sd">        the ADF statistic is computed, and the SADF statistic is determined as the maximum value across </span>
+<span class="sd">        all ADF statistics.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        sadf : float</span>
+<span class="sd">            The supremum ADF (SADF) statistic, which is the maximum of the ADF statistics over all expanding windows.</span>
+<span class="sd">        </span>
+<span class="sd">        badfs : pd.Series</span>
+<span class="sd">            A Pandas Series containing the ADF statistics for each window size from `swindow0` to `T`. </span>
+<span class="sd">            The index of the Series corresponds to the time index of the input series `y`.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - The ADF statistic is calculated using the specified `adflag` (number of lags) and `regression`</span>
+<span class="sd">          (constant or constant with trend).</span>
+<span class="sd">        - The SADF test is a recursive right-tailed unit root test, commonly used for bubble detection in</span>
+<span class="sd">          time series data.</span>
+<span class="sd">        - The `badfs` series represents the sequence of ADF test statistics for each expanding window,</span>
+<span class="sd">          where the length of the window increases from `swindow0` to `T`.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; pw_sadf = PWY_SADF(y=price_series, swindow0=30, adflag=1, regression=&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; sadf_stat, adf_stats = pw_sadf.stats()</span>
+<span class="sd">        &gt;&gt;&gt; print(sadf_stat)</span>
+<span class="sd">        2.345  # Example output for the maximum ADF statistic</span>
+<span class="sd">        &gt;&gt;&gt; print(adf_stats.head())</span>
+<span class="sd">        2000-01-31    NaN</span>
+<span class="sd">        2000-02-29    NaN</span>
+<span class="sd">        2000-03-31    NaN</span>
+<span class="sd">        2000-04-30    NaN</span>
+<span class="sd">        2000-05-31   -1.23</span>
+<span class="sd">        dtype: float64</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">badfs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">y_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span> <span class="c1"># Convert y series to array, in order to speed up the calculation by @njit</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">badfs</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ADF</span><span class="p">(</span><span class="n">y_array</span><span class="p">[:</span><span class="n">i</span><span class="p">],</span> <span class="n">adflag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">adflag</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">regression</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">sadf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">badfs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">badfs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">badfs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+    
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sadf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">badfs</span></div>
+
+    
+    
+<div class="viewcode-block" id="PWY_SADF.critical_values">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.PWY_SADF.critical_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">critical_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cv_qes</span><span class="o">=</span><span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">],</span> <span class="n">m</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the critical values for the Supremum Augmented Dickey-Fuller (SADF) test.</span>
+
+<span class="sd">        This method simulates random walks under the null hypothesis of a unit root and calculates the </span>
+<span class="sd">        SADF statistics for each simulation. Based on these simulations, it derives the critical values </span>
+<span class="sd">        for the SADF test at specified quantiles. It also provides the corresponding critical value </span>
+<span class="sd">        series for each window in the expanding sequence.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        T : int, optional</span>
+<span class="sd">            The sample size used in the simulation. If not provided, the sample size of the observed time </span>
+<span class="sd">            series `y` is used. Defaults to `None`.</span>
+<span class="sd">        </span>
+<span class="sd">        cv_qes : list of float, optional</span>
+<span class="sd">            Quantiles for which the critical values should be calculated. These quantiles represent the </span>
+<span class="sd">            desired significance levels. The default values are [0.9, 0.95, 0.99], corresponding to the </span>
+<span class="sd">            10%, 5%, and 1% significance levels, respectively.</span>
+<span class="sd">        </span>
+<span class="sd">        m : int, optional</span>
+<span class="sd">            The number of Monte Carlo simulations used to generate the critical values. Defaults to 2000.</span>
+<span class="sd">        </span>
+<span class="sd">        seed : int, optional</span>
+<span class="sd">            Random seed used to ensure reproducibility of the simulations. Defaults to 1.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        cv_sadf : np.ndarray</span>
+<span class="sd">            An array containing the SADF critical values at the specified quantiles (e.g., 90th, 95th, and 99th percentiles).</span>
+<span class="sd">        </span>
+<span class="sd">        cv_badfs : pd.DataFrame</span>
+<span class="sd">            A DataFrame where each column corresponds to the critical value series for a specific quantile, </span>
+<span class="sd">            indexed by the time series index of `y` (if `T == len(y)`). Each column contains the critical </span>
+<span class="sd">            values for the SADF test at the respective quantile for each window size.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - The method generates `m` random walk series and computes the SADF statistics for each of them.</span>
+<span class="sd">        - The critical values are derived by taking the quantiles of the SADF statistics across the</span>
+<span class="sd">          simulations.</span>
+<span class="sd">        - The `cv_badfs` DataFrame provides the critical values at each window size, which can be used</span>
+<span class="sd">          to compare with the actual SADF statistics obtained from the observed data.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; pw_sadf = PWY_SADF(y=price_series, swindow0=30, adflag=1, regression=&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; sadf_cv, adf_cv_series = pw_sadf.critical_values(cv_qes=[0.95, 0.99], m=1000, seed=42)</span>
+<span class="sd">        &gt;&gt;&gt; print(sadf_cv)</span>
+<span class="sd">        [1.750, 2.100]  # Example critical values at 95% and 99% levels</span>
+<span class="sd">        &gt;&gt;&gt; print(adf_cv_series.head())</span>
+<span class="sd">                    0.95   0.99</span>
+<span class="sd">        2000-01-31    NaN    NaN</span>
+<span class="sd">        2000-02-29    NaN    NaN</span>
+<span class="sd">        2000-03-31    NaN    NaN</span>
+<span class="sd">        2000-04-30    NaN    NaN</span>
+<span class="sd">        2000-05-31   1.23   1.75</span>
+<span class="sd">        dtype: float64</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">T</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span>
+            
+        <span class="c1"># Data generating process</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">e</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="c1"># Sup ADF test</span>
+        <span class="n">badfs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">dim</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">sadf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">m</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">badfs</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ADF</span><span class="p">(</span><span class="n">y</span><span class="p">[:</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">adflag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">adflag</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">regression</span><span class="p">)</span>
+        
+        <span class="n">sadf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">badfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv_sadf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">sadf</span><span class="p">,</span> <span class="n">cv_qes</span><span class="p">)</span>
+        <span class="n">cv_badfs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(((</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">dim</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">cv_qes</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">badfs</span><span class="p">,</span> <span class="n">cv_qes</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv_badfs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cv_badfs</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">cv_qes</span><span class="p">)</span>
+        <span class="c1"># if (self.y is not None) and len(self.y) == len(self.cv_badfs):</span>
+        <span class="k">if</span> <span class="n">T</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cv_badfs</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">index</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_sadf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_badfs</span></div>
+
+
+<div class="viewcode-block" id="PWY_SADF.bubbles">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.PWY_SADF.bubbles">[docs]</a>
+    <span class="k">def</span> <span class="nf">bubbles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_qe</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Identifies periods of explosive behavior (bubbles) based on the Supremum Augmented Dickey-Fuller (SADF) test results.</span>
+
+<span class="sd">        This method compares the SADF statistics (badfs) with the critical value series at a specified quantile </span>
+<span class="sd">        and identifies time periods where the SADF statistic exceeds the critical value. These periods are </span>
+<span class="sd">        considered as potential bubbles.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        test_qe : float</span>
+<span class="sd">            The quantile used to select the critical value series for comparison. This quantile should be one of the </span>
+<span class="sd">            values used in the `critical_values` method (e.g., 0.9, 0.95, 0.99) to determine the significance level.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bubbles_df : pd.DataFrame</span>
+<span class="sd">            A DataFrame containing the start and end dates of the identified bubbles. Each row represents a separate </span>
+<span class="sd">            bubble episode, and the DataFrame has two columns:</span>
+<span class="sd">            - &#39;Start Date&#39;: The date when the bubble period begins (when the SADF statistic first exceeds the critical value).</span>
+<span class="sd">            - &#39;End Date&#39;: The date when the bubble period ends (when the SADF statistic falls back below the critical value).</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - The method relies on the comparison of the SADF statistic (`badfs`) and the critical value series at the specified quantile.</span>
+<span class="sd">        - Consecutive periods where the SADF statistic exceeds the critical value are considered part of the same bubble.</span>
+<span class="sd">        - The identified bubble periods are returned as a DataFrame, which can be useful for further analysis or visualization.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; pw_sadf = PWY_SADF(y=price_series, swindow0=30, adflag=1, regression=&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; pw_sadf.stats()  # Compute the SADF statistics</span>
+<span class="sd">        &gt;&gt;&gt; pw_sadf.critical_values(cv_qes=[0.95, 0.99], m=1000, seed=42)  # Compute critical values</span>
+<span class="sd">        &gt;&gt;&gt; bubbles_df = pw_sadf.bubbles(test_qe=0.95)  # Identify bubble periods using the 95% critical value</span>
+<span class="sd">        &gt;&gt;&gt; print(bubbles_df)</span>
+<span class="sd">                    Start Date   End Date</span>
+<span class="sd">        bubble_1    2002-03-31  2002-07-31</span>
+<span class="sd">        bubble_2    2004-05-31  2004-09-30</span>
+<span class="sd">        bubble_3    2007-01-31  2007-04-30</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_qe</span> <span class="o">=</span> <span class="n">test_qe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bubbles_df</span> <span class="o">=</span> <span class="n">bubbles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">badfs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_badfs</span><span class="p">[</span><span class="n">test_qe</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bubbles_df</span></div>
+
+
+<div class="viewcode-block" id="PWY_SADF.plot">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.PWY_SADF.plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots the time series of the input data along with the SADF statistics and critical values, highlighting identified bubble periods.</span>
+
+<span class="sd">        This method generates two subplots:</span>
+<span class="sd">        - The first plot shows the time series of the input data (`y`).</span>
+<span class="sd">        - The second plot shows the SADF statistics (`badfs`) and the corresponding critical values. </span>
+<span class="sd">        Periods identified as bubbles are shaded in both plots.</span>
+
+<span class="sd">        The method visually displays the relationship between the SADF statistics and critical values to help </span>
+<span class="sd">        interpret when and where bubble periods occur.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            The method generates a plot but does not return any objects.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        - Bubble periods are shaded in gray on both the input data and SADF statistic plots.</span>
+<span class="sd">        - Critical values are shown in red, and the SADF statistic is shown in blue.</span>
+<span class="sd">        - The method assumes that the `bubbles` method has already been called to identify bubble periods</span>
+<span class="sd">          and populate the `bubbles_df` attribute.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; pw_sadf = PWY_SADF(y=price_series, swindow0=30, adflag=1, regression=&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; pw_sadf.stats()  # Compute the SADF statistics</span>
+<span class="sd">        &gt;&gt;&gt; pw_sadf.critical_values(cv_qes=[0.95, 0.99], m=1000, seed=42)  # Compute critical values</span>
+<span class="sd">        &gt;&gt;&gt; pw_sadf.bubbles(test_qe=0.95)  # Identify bubble periods</span>
+<span class="sd">        &gt;&gt;&gt; pw_sadf.plot()  # Plot the data, SADF statistics, and bubble periods</span>
+
+<span class="sd">        The resulting plot will show:</span>
+<span class="sd">        - The price series in green (first subplot).</span>
+<span class="sd">        - The SADF statistics in blue and critical values in red (second subplot).</span>
+<span class="sd">        - Gray-shaded areas indicating identified bubble periods on both subplots.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">badfs</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_badfs</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;badfs&#39;</span><span class="p">)</span></div>
+</div>
+
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="PSY_GSADF">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.PSY_GSADF">[docs]</a>
+<span class="k">class</span> <span class="nc">PSY_GSADF</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implements the Generalized Supremum Augmented Dickey-Fuller (GSADF) test, based on Phillips, Shi, </span>
+<span class="sd">    and Yu (2015), to detect and date-stamp multiple speculative bubbles in a time series.</span>
+
+<span class="sd">    The GSADF test extends the SADF test by allowing both the start and end points of the sample </span>
+<span class="sd">    window to vary, making it more robust in detecting multiple periods of explosive behavior. This </span>
+<span class="sd">    test is widely used for identifying bubbles in financial and economic time series.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : pandas.Series, optional</span>
+<span class="sd">        The time series data on which the GSADF test will be performed.</span>
+<span class="sd">    swindow0 : int, optional</span>
+<span class="sd">        The minimum window size for the backward SADF (BSADF) calculations. If not provided, it defaults </span>
+<span class="sd">        to `int(T * (0.01 + 1.8 / np.sqrt(T)))`, where `T` is the length of the time series.</span>
+<span class="sd">    adflag : int, default=1</span>
+<span class="sd">        The number of lags used in the ADF test.</span>
+<span class="sd">    regression : {&#39;c&#39;, &#39;ct&#39;, &#39;n&#39;}, default=&#39;c&#39;</span>
+<span class="sd">        The type of deterministic term used in the ADF test:</span>
+<span class="sd">        - &#39;c&#39; : constant.</span>
+<span class="sd">        - &#39;ct&#39;: constant and trend.</span>
+<span class="sd">        - &#39;n&#39; : no deterministic terms.</span>
+<span class="sd">    njit : bool, default=False</span>
+<span class="sd">        If True, the method uses a Numba-optimized version of the ADF test to improve computational efficiency.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : pandas.Series</span>
+<span class="sd">        The input time series data.</span>
+<span class="sd">    T : int</span>
+<span class="sd">        The length of the input time series.</span>
+<span class="sd">    swindow0 : int</span>
+<span class="sd">        The minimum window size used for backward SADF calculations.</span>
+<span class="sd">    adflag : int</span>
+<span class="sd">        The number of lags used in the ADF test.</span>
+<span class="sd">    regression : str</span>
+<span class="sd">        The type of deterministic term used in the ADF test (&#39;c&#39;, &#39;ct&#39;, or &#39;n&#39;).</span>
+<span class="sd">    ADF : callable</span>
+<span class="sd">        The function used to compute the ADF statistic, either `ADF_FL` or `ADF_FL_njit` depending on the `njit` parameter.</span>
+<span class="sd">    gsadf : float</span>
+<span class="sd">        The Generalized Supremum ADF (GSADF) statistic, representing the maximum BSADF statistic across all windows.</span>
+<span class="sd">    bsadfs : pandas.Series</span>
+<span class="sd">        A series of BSADF statistics, indexed by the time series&#39; index.</span>
+<span class="sd">    cv_gsadf : numpy.ndarray</span>
+<span class="sd">        Critical values for the GSADF statistic at specified quantiles.</span>
+<span class="sd">    cv_bsadfs : pandas.DataFrame</span>
+<span class="sd">        Critical values for the BSADF statistics over time at specified quantiles.</span>
+<span class="sd">    bubbles_df : pandas.DataFrame</span>
+<span class="sd">        Detected bubble periods with their start and end dates.</span>
+<span class="sd">    test_qe : float</span>
+<span class="sd">        The quantile used to test for bubbles in the `bubbles()` method.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    stats()</span>
+<span class="sd">        Computes the GSADF statistic and the BSADF statistics for varying windows.</span>
+<span class="sd">    critical_values(T=None, bsadfs=None, cv_qes=[0.9, 0.95, 0.99], m=2000, seed=1)</span>
+<span class="sd">        Computes the critical values for the GSADF and BSADF statistics using Monte Carlo simulations.</span>
+<span class="sd">    bubbles(test_qe)</span>
+<span class="sd">        Identifies bubble periods by comparing the BSADF statistics to the critical values at a given quantile.</span>
+<span class="sd">    plot()</span>
+<span class="sd">        Plots the time series, BSADF statistics, and critical values, highlighting bubble periods.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Phillips, P. C., Shi, S., &amp; Yu, J. (2015). Testing for multiple bubbles: Historical episodes of exuberance and </span>
+<span class="sd">    collapse in the S&amp;P 500. *International Economic Review*, 56(4), 1043-1078.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; gsadf_test = PSY_GSADF(y=price_series, swindow0=30, adflag=1, regression=&#39;c&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; gsadf_stat, bsadfs_stats = gsadf_test.stats()  # Compute GSADF and BSADF statistics</span>
+<span class="sd">    &gt;&gt;&gt; cv_gsadf, cv_bsadfs = gsadf_test.critical_values(m=5000, cv_qes=[0.9, 0.95, 0.99])</span>
+<span class="sd">    &gt;&gt;&gt; bubbles_df = gsadf_test.bubbles(test_qe=0.99)  # Detect bubble periods</span>
+<span class="sd">    &gt;&gt;&gt; gsadf_test.plot()  # Visualize the results</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">,</span> <span class="n">njit</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="k">if</span> <span class="n">y</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span> <span class="o">=</span> <span class="n">swindow0</span> <span class="k">if</span> <span class="n">swindow0</span> <span class="k">else</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.01</span> <span class="o">+</span> <span class="mf">1.8</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adflag</span> <span class="o">=</span> <span class="n">adflag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regression</span> <span class="o">=</span> <span class="n">regression</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ADF</span> <span class="o">=</span> <span class="n">ADF_FL_njit</span> <span class="k">if</span> <span class="n">njit</span> <span class="k">else</span> <span class="n">ADF_FL</span>
+        
+            
+<div class="viewcode-block" id="PSY_GSADF.stats">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.PSY_GSADF.stats">[docs]</a>
+    <span class="k">def</span> <span class="nf">stats</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the Generalized Supremum Augmented Dickey-Fuller (GSADF) statistic and the backward SADF </span>
+<span class="sd">        statistics for expanding windows of the time series.</span>
+
+<span class="sd">        The GSADF test is an extension of the SADF test, where both the start and end points of the estimation </span>
+<span class="sd">        window vary, making the test more robust in detecting multiple bubbles. This method computes the GSADF </span>
+<span class="sd">        statistic, which is the maximum backward SADF statistic over the sample.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        gsadf : float</span>
+<span class="sd">            The Generalized Supremum ADF (GSADF) statistic, which is the maximum backward SADF statistic over </span>
+<span class="sd">            the expanding sample.</span>
+<span class="sd">        bsadfs : pandas.Series</span>
+<span class="sd">            A time series of backward SADF (BSADF) statistics, calculated for each window endpoint.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The GSADF test is useful in identifying speculative bubbles by testing for explosive behavior in multiple </span>
+<span class="sd">        periods, making it more sensitive to detecting both the origination and collapse of bubbles.</span>
+
+<span class="sd">        References</span>
+<span class="sd">        ----------</span>
+<span class="sd">        Phillips, P. C., Shi, S., &amp; Yu, J. (2015). Testing for multiple bubbles: Historical episodes of exuberance and collapse </span>
+<span class="sd">        in the S&amp;P 500. *International Economic Review*, 56(4), 1043-1078.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; gsadf_test = PSY_GSADF(y=price_series, swindow0=30, adflag=1, regression=&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; gsadf_stat, bsadfs_stats = gsadf_test.stats()  # Compute the GSADF and BSADF statistics</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bsadfs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">y_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">r2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">dim0</span> <span class="o">=</span> <span class="n">r2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">rwadft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim0</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">r1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dim0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">rwadft</span><span class="p">[</span><span class="n">r1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ADF</span><span class="p">(</span><span class="n">y_array</span><span class="p">[</span><span class="n">r1</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">r2</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">bsadfs</span><span class="p">[</span><span class="n">r2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwadft</span><span class="p">)</span>
+            
+        <span class="bp">self</span><span class="o">.</span><span class="n">gsadf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bsadfs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bsadfs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">bsadfs</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">gsadf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">bsadfs</span></div>
+
+    
+<div class="viewcode-block" id="PSY_GSADF.critical_values">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.PSY_GSADF.critical_values">[docs]</a>
+    <span class="k">def</span> <span class="nf">critical_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">bsadfs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cv_qes</span><span class="o">=</span><span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">],</span> <span class="n">m</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Computes the critical values for the Generalized Supremum Augmented Dickey-Fuller (GSADF) test </span>
+<span class="sd">        based on Monte Carlo simulations.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        T : int, optional</span>
+<span class="sd">            Length of the time series. If not provided, the length of the series (`self.T`) is used.</span>
+<span class="sd">        bsadfs : numpy.ndarray, optional</span>
+<span class="sd">            Precomputed matrix of backward SADF (BSADF) statistics from previous simulations, </span>
+<span class="sd">            allowing continuation of simulations. If None, a new matrix is initialized.</span>
+<span class="sd">        cv_qes : list of float, optional</span>
+<span class="sd">            Quantiles for which critical values are computed, by default [0.9, 0.95, 0.99].</span>
+<span class="sd">        m : int, optional</span>
+<span class="sd">            Number of Monte Carlo simulations to run for generating the critical values, by default 2000.</span>
+<span class="sd">        seed : int, optional</span>
+<span class="sd">            Seed for the random number generator used in Monte Carlo simulations, by default 1.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        cv_gsadf : numpy.ndarray</span>
+<span class="sd">            Critical values for the GSADF test at the specified quantiles.</span>
+<span class="sd">        cv_bsadfs : pandas.DataFrame</span>
+<span class="sd">            Critical values for the BSADF statistics over time at the specified quantiles.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The critical values are obtained by simulating a random walk process and computing the GSADF </span>
+<span class="sd">        and BSADF statistics for each simulation. These statistics are then used to calculate the </span>
+<span class="sd">        empirical quantiles, which serve as the critical values.</span>
+
+<span class="sd">        The random walk is generated as a cumulative sum of standard normal shocks, adjusted with a </span>
+<span class="sd">        small drift term (`a = T**(-1)`), where `T` is the length of the time series.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; gsadf_test = PSY_GSADF(y=price_series, swindow0=30, adflag=1, regression=&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; cv_gsadf, cv_bsadfs = gsadf_test.critical_values(m=5000, cv_qes=[0.9, 0.95, 0.99])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">T</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span>
+        <span class="c1"># Data generating process</span>
+        <span class="n">dim</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+        <span class="n">e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">T</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">e</span> <span class="o">+</span> <span class="n">a</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        
+        <span class="c1"># Generalized sup ADF test</span>
+        <span class="n">gsadf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">bsadfs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">bsadfs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">m</span><span class="p">,</span> <span class="n">dim</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">start</span> <span class="o">=</span> <span class="nb">next</span><span class="p">((</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">bsadfs</span><span class="p">)</span> <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">row</span><span class="p">)</span><span class="o">.</span><span class="n">any</span><span class="p">()),</span> <span class="n">m</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">r2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span><span class="p">,</span> <span class="n">T</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                <span class="n">dim0</span> <span class="o">=</span> <span class="n">r2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">rwadft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim0</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">r1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dim0</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+                    <span class="n">rwadft</span><span class="p">[</span><span class="n">r1</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ADF</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="n">r1</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">r2</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">bsadfs</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">r2</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">swindow0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">rwadft</span><span class="p">)</span>
+            
+        <span class="n">gsadf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">bsadfs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv_gsadf</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">gsadf</span><span class="p">,</span> <span class="n">cv_qes</span><span class="p">)</span>
+        <span class="n">cv_bsadfs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(((</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">-</span> <span class="n">dim</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">cv_qes</span><span class="p">)),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">quantile</span><span class="p">(</span><span class="n">bsadfs</span><span class="p">,</span> <span class="n">cv_qes</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cv_bsadfs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">cv_bsadfs</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">cv_qes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">==</span> <span class="n">T</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cv_bsadfs</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">index</span>
+        
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_gsadf</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_bsadfs</span></div>
+
+    
+<div class="viewcode-block" id="PSY_GSADF.bubbles">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.PSY_GSADF.bubbles">[docs]</a>
+    <span class="k">def</span> <span class="nf">bubbles</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test_qe</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Identifies and returns periods of explosive behavior (bubbles) in the time series </span>
+<span class="sd">        based on the GSADF test statistic and its critical values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        test_qe : float</span>
+<span class="sd">            The quantile level (e.g., 0.95 or 0.99) of the critical value to use for bubble identification. </span>
+<span class="sd">            It must match one of the quantiles used in `critical_values()`.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bubbles_df : pandas.DataFrame</span>
+<span class="sd">            DataFrame containing the start and end dates of detected bubble periods.</span>
+<span class="sd">            The index is labeled as &#39;bubble_1&#39;, &#39;bubble_2&#39;, etc., for each identified bubble.</span>
+<span class="sd">            The columns are:</span>
+<span class="sd">            - &#39;Start Date&#39;: The start date of the bubble.</span>
+<span class="sd">            - &#39;End Date&#39;: The end date of the bubble.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        A bubble is detected when the BSADF statistic exceeds the critical value corresponding </span>
+<span class="sd">        to the specified quantile level (`test_qe`). The method identifies periods during which </span>
+<span class="sd">        the time series shows signs of explosive growth.</span>
+
+<span class="sd">        The method applies a rolling window approach where at each time step the BSADF statistic </span>
+<span class="sd">        is compared to the critical value. If the statistic is greater than the critical value, </span>
+<span class="sd">        it indicates a bubble, and the corresponding time period is recorded.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; gsadf_test = PSY_GSADF(y=price_series, swindow0=30, adflag=1, regression=&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; gsadf_test.critical_values(m=5000, cv_qes=[0.9, 0.95, 0.99])</span>
+<span class="sd">        &gt;&gt;&gt; bubbles_df = gsadf_test.bubbles(test_qe=0.99)</span>
+<span class="sd">        &gt;&gt;&gt; print(bubbles_df)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test_qe</span> <span class="o">=</span> <span class="n">test_qe</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bubbles_df</span> <span class="o">=</span> <span class="n">bubbles</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bsadfs</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">cv_bsadfs</span><span class="p">[</span><span class="n">test_qe</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">bubbles_df</span></div>
+
+
+<div class="viewcode-block" id="PSY_GSADF.plot">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.PSY_GSADF.plot">[docs]</a>
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Plots the time series and the corresponding BSADF test statistics along with the critical values,</span>
+<span class="sd">        highlighting the periods of explosive behavior (bubbles).</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            Displays a plot with two subplots:</span>
+<span class="sd">            - The upper subplot shows the original time series (`y`).</span>
+<span class="sd">            - The lower subplot shows the BSADF test statistics and the corresponding critical values </span>
+<span class="sd">            for a given quantile level (`test_qe`).</span>
+<span class="sd">            Detected bubble periods are shaded in both plots.</span>
+
+<span class="sd">        Notes</span>
+<span class="sd">        -----</span>
+<span class="sd">        The method visualizes the results of the GSADF test by plotting the following:</span>
+<span class="sd">        1. The original time series (`y`) in the upper plot.</span>
+<span class="sd">        2. The BSADF statistics in the lower plot, where they are compared against the critical values </span>
+<span class="sd">        (computed in the `critical_values()` method) at the specified quantile level (`test_qe`).</span>
+<span class="sd">        3. Periods identified as bubbles (from the `bubbles()` method) are shaded in both plots </span>
+<span class="sd">        for easy identification.</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">        &gt;&gt;&gt; gsadf_test = PSY_GSADF(y=price_series, swindow0=30, adflag=1, regression=&#39;c&#39;)</span>
+<span class="sd">        &gt;&gt;&gt; gsadf_test.critical_values(m=5000, cv_qes=[0.9, 0.95, 0.99])</span>
+<span class="sd">        &gt;&gt;&gt; gsadf_test.bubbles(test_qe=0.99)</span>
+<span class="sd">        &gt;&gt;&gt; gsadf_test.plot()</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">stat</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bsadfs</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cv_bsadfs</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;bsadfs&#39;</span><span class="p">)</span></div>
+</div>
+
+
+<span class="c1">#%%</span>
+<div class="viewcode-block" id="WHL">
+<a class="viewcode-back" href="../bubble_indicators.html#bubble_indicators.WHL">[docs]</a>
+<span class="k">class</span> <span class="nc">WHL</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Implements the Whitehouse, Harvey, and Leybourne (2022) test for detecting and analyzing </span>
+<span class="sd">    speculative bubbles and crashes in time series data.</span>
+
+<span class="sd">    This class calculates two key statistics: </span>
+<span class="sd">    - **A-statistic**: Used to detect the presence of bubbles (explosive behavior).</span>
+<span class="sd">    - **S-statistic**: Used to identify crashes (sharp declines) following bubbles.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    y : pandas.Series</span>
+<span class="sd">        The time series data to be analyzed for bubbles and crashes.</span>
+<span class="sd">    k : int, optional, default=10</span>
+<span class="sd">        The number of lags used in calculating the A-statistic.</span>
+<span class="sd">    m : int, optional, default=10</span>
+<span class="sd">        The window size used for the first segment in calculating the S-statistic.</span>
+<span class="sd">    n : int, optional, default=2</span>
+<span class="sd">        The window size used for the second segment in calculating the S-statistic.</span>
+<span class="sd">    T_star : int, optional, default=80</span>
+<span class="sd">        The threshold time index used to determine the critical values for both A and S statistics.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    critical_values : dict</span>
+<span class="sd">        Contains the critical values for the A and S statistics:</span>
+<span class="sd">        - &#39;A_critical_value&#39;: Critical value for detecting bubbles using the A-statistic.</span>
+<span class="sd">        - &#39;S_critical_value&#39;: Critical value for detecting crashes using the S-statistic.</span>
+<span class="sd">    bubbles : pandas.DataFrame</span>
+<span class="sd">        DataFrame listing the origin and collapse dates of detected bubbles. Columns:</span>
+<span class="sd">        - &#39;Origin&#39;: Start date of the bubble.</span>
+<span class="sd">        - &#39;Collapse&#39;: End date of the bubble or &#39;On going&#39; if no crash is detected.</span>
+<span class="sd">    stats : pandas.DataFrame</span>
+<span class="sd">        DataFrame containing the computed A and S statistics along with the original time series data.</span>
+<span class="sd">    T_star : int</span>
+<span class="sd">        Threshold time index used to determine the critical values.</span>
+
+<span class="sd">    Methods</span>
+<span class="sd">    -------</span>
+<span class="sd">    plot()</span>
+<span class="sd">        Plots the original time series, A-statistic, S-statistic, and highlights detected bubbles and crashes.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    - The A-statistic is designed to detect periods of explosive growth, indicative of bubbles. </span>
+<span class="sd">      A bubble is flagged when the A-statistic exceeds its critical value.</span>
+<span class="sd">    - The S-statistic detects crashes by measuring sharp declines following bubbles. A crash is </span>
+<span class="sd">      flagged when the S-statistic falls below its critical value.</span>
+<span class="sd">    - The method iteratively identifies bubbles and their corresponding crashes, if any, and stores </span>
+<span class="sd">      them in the `bubbles` attribute.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Whitehouse, D., Harvey, D. I., &amp; Leybourne, S. J. (2022). Detecting bubbles and crashes in financial markets. </span>
+<span class="sd">    *Journal of Financial Econometrics*.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+<span class="sd">    &gt;&gt;&gt; import pandas as pd</span>
+<span class="sd">    &gt;&gt;&gt; y = pd.Series([...], index=pd.date_range(&#39;2000-01-01&#39;, periods=100))</span>
+<span class="sd">    &gt;&gt;&gt; whl_test = WHL(y, k=10, m=10, n=2, T_star=80)</span>
+<span class="sd">    &gt;&gt;&gt; print(whl_test.bubbles)  # View detected bubbles and crashes</span>
+<span class="sd">    &gt;&gt;&gt; whl_test.plot()  # Plot the time series, statistics, and detected events</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">T_star</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_star</span> <span class="o">=</span> <span class="n">T_star</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="s1">&#39;y&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">to_frame</span><span class="p">()</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;delta&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">diff</span><span class="p">()</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        
+        <span class="c1"># A_statistic</span>
+        <span class="n">multiplier</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">array</span> <span class="o">=</span> <span class="n">multiplier</span> <span class="o">*</span> <span class="n">df</span><span class="o">.</span><span class="n">delta</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">e</span><span class="o">-</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span> <span class="n">e</span><span class="p">]</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;A_statistic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">array</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">array</span> <span class="o">**</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">A_critical_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">A_statistic</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="n">T_star</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;bubble_flag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">A_statistic</span> <span class="o">&gt;</span> <span class="n">A_critical_value</span>
+        
+        <span class="c1">#S_statistic</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="o">+</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">df</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">array1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">delta</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">e</span><span class="o">-</span><span class="n">m</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">e</span><span class="o">-</span><span class="n">n</span><span class="p">])</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">delta</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">e</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">e</span><span class="p">])</span>
+            <span class="n">array2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">delta</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">e</span><span class="o">-</span><span class="n">m</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">e</span><span class="o">-</span><span class="n">n</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">delta</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">e</span><span class="o">-</span><span class="n">n</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">e</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+            <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">e</span><span class="p">,</span> <span class="s1">&#39;S_statistic&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">array1</span><span class="o">/</span><span class="n">array2</span>
+        <span class="n">S_critical_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">S_statistic</span><span class="o">.</span><span class="n">loc</span><span class="p">[:</span><span class="n">T_star</span><span class="p">])</span>
+        <span class="n">df</span><span class="p">[</span><span class="s1">&#39;crash_flag&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">S_statistic</span> <span class="o">&lt;</span> <span class="n">S_critical_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">critical_values</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;A_critical_value&#39;</span><span class="p">:</span><span class="n">A_critical_value</span><span class="p">,</span> <span class="s1">&#39;S_critical_value&#39;</span><span class="p">:</span><span class="n">S_critical_value</span><span class="p">}</span>
+        
+        <span class="c1"># Detect bubbles</span>
+        <span class="n">a_array</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">bubble_flag</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">a_array</span> <span class="o">=</span> <span class="n">a_array</span><span class="p">[</span><span class="n">a_array</span> <span class="o">&gt;=</span> <span class="n">T_star</span><span class="o">+</span><span class="n">k</span><span class="p">]</span>
+        <span class="n">s_array</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="o">.</span><span class="n">crash_flag</span> <span class="o">==</span> <span class="kc">True</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">values</span>
+        <span class="n">origin</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="p">[]</span>
+        
+        <span class="k">if</span> <span class="n">a_array</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;No bubble is detected&#39;</span><span class="p">)</span>
+        <span class="k">while</span> <span class="n">a_array</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">origin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">a_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">s_array</span> <span class="o">=</span> <span class="n">s_array</span><span class="p">[</span><span class="n">s_array</span><span class="o">&gt;</span><span class="n">a_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="n">s_array</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">end</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="n">s_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">a_array</span> <span class="o">=</span> <span class="n">a_array</span><span class="p">[</span><span class="n">a_array</span> <span class="o">&gt;=</span> <span class="n">s_array</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">k</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">end</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;On going&#39;</span><span class="p">)</span>
+                <span class="k">break</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bubbles</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;Origin&#39;</span><span class="p">:</span><span class="n">origin</span><span class="p">,</span> <span class="s1">&#39;Collapse&#39;</span><span class="p">:</span><span class="n">end</span><span class="p">},</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;bubble_</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">origin</span><span class="p">))])</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;delta&#39;</span><span class="p">,</span> <span class="s1">&#39;bubble_flag&#39;</span><span class="p">,</span> <span class="s1">&#39;crash_flag&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">y</span><span class="o">.</span><span class="n">index</span>
+        
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span><span class="mi">9</span><span class="p">))</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;y&#39;</span><span class="p">)</span>
+        <span class="nb">max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">])</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;A_statistic&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;A_statistic&#39;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span><span class="s1">&#39;S_statistic&#39;</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;S_statistic&#39;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">critical_values</span><span class="p">[</span><span class="s1">&#39;A_critical_value&#39;</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">critical_values</span><span class="p">[</span><span class="s1">&#39;S_critical_value&#39;</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+        
+        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">T_star</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">T_star</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+        <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">stats</span><span class="o">.</span><span class="n">index</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">T_star</span><span class="p">],</span> <span class="nb">max</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;$\mathregular{T^{*}}$&#39;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">bubbles</span><span class="o">.</span><span class="n">index</span><span class="p">:</span>
+            <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bubbles</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;Origin&#39;</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+            <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bubbles</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;Origin&#39;</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;g&#39;</span><span class="p">)</span>
+            <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bubbles</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;Origin&#39;</span><span class="p">],</span> <span class="nb">max</span><span class="p">,</span> <span class="s1">&#39;Bubble detected&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bubbles</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;Collapse&#39;</span><span class="p">])</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">:</span>
+                <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bubbles</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;Collapse&#39;</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+                <span class="n">axs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bubbles</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;Collapse&#39;</span><span class="p">],</span> <span class="n">ls</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+                <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bubbles</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">idx</span><span class="p">,</span> <span class="s1">&#39;Collapse&#39;</span><span class="p">],</span> <span class="nb">max</span><span class="p">,</span> <span class="s1">&#39;Crash detected&#39;</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mohammad Ebrahimi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

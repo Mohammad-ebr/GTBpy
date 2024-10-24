@@ -1,0 +1,1250 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>google_trends_functions module &mdash; GTBpy Documentation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="forecast_functions module" href="forecast_functions.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GTBpy Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">GTBpy</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="bubble_indicators.html">bubble_indicators module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="forecast_functions.html">forecast_functions module</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">google_trends_functions module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.trend_loader"><code class="docutils literal notranslate"><span class="pre">trend_loader()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.reg_trend_selector"><code class="docutils literal notranslate"><span class="pre">reg_trend_selector()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.reg_detrend_deseasonal"><code class="docutils literal notranslate"><span class="pre">reg_detrend_deseasonal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.MA_detrend_deseasonal"><code class="docutils literal notranslate"><span class="pre">MA_detrend_deseasonal()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.prepare_gtrends"><code class="docutils literal notranslate"><span class="pre">prepare_gtrends()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.prepare_hpi"><code class="docutils literal notranslate"><span class="pre">prepare_hpi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.compute_weights"><code class="docutils literal notranslate"><span class="pre">compute_weights()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.GT_plot"><code class="docutils literal notranslate"><span class="pre">GT_plot()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.plot_gtrends"><code class="docutils literal notranslate"><span class="pre">plot_gtrends()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.plot_hsi"><code class="docutils literal notranslate"><span class="pre">plot_hsi()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.plot_improvement"><code class="docutils literal notranslate"><span class="pre">plot_improvement()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.plot_forecast"><code class="docutils literal notranslate"><span class="pre">plot_forecast()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#google_trends_functions.GoogleTrend"><code class="docutils literal notranslate"><span class="pre">GoogleTrend</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#google_trends_functions.GoogleTrend.prepare_gtrends"><code class="docutils literal notranslate"><span class="pre">GoogleTrend.prepare_gtrends()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#google_trends_functions.GoogleTrend.prepare_hpi"><code class="docutils literal notranslate"><span class="pre">GoogleTrend.prepare_hpi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#google_trends_functions.GoogleTrend.compute_hsi"><code class="docutils literal notranslate"><span class="pre">GoogleTrend.compute_hsi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#google_trends_functions.GoogleTrend.lag_setting"><code class="docutils literal notranslate"><span class="pre">GoogleTrend.lag_setting()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#google_trends_functions.GoogleTrend.forecast"><code class="docutils literal notranslate"><span class="pre">GoogleTrend.forecast()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#google_trends_functions.GoogleTrend.results"><code class="docutils literal notranslate"><span class="pre">GoogleTrend.results()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#google_trends_functions.GoogleTrend.plot_gtrends"><code class="docutils literal notranslate"><span class="pre">GoogleTrend.plot_gtrends()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#google_trends_functions.GoogleTrend.plot_hsi"><code class="docutils literal notranslate"><span class="pre">GoogleTrend.plot_hsi()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#google_trends_functions.GoogleTrend.plot_improvement"><code class="docutils literal notranslate"><span class="pre">GoogleTrend.plot_improvement()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#google_trends_functions.GoogleTrend.plot_forecast"><code class="docutils literal notranslate"><span class="pre">GoogleTrend.plot_forecast()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GTBpy Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">GTBpy</a></li>
+      <li class="breadcrumb-item active">google_trends_functions module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/google_trends_functions.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-google_trends_functions">
+<span id="google-trends-functions-module"></span><h1>google_trends_functions module<a class="headerlink" href="#module-google_trends_functions" title="Link to this heading"></a></h1>
+<p>Functions are used to get hsi from Google trends data</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.trend_loader">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">trend_loader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hpi</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">folder_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">RE_companies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">drop_companies</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#trend_loader"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.trend_loader" title="Link to this definition"></a></dt>
+<dd><p>Loads google trends data in csv format in a folder and returns four dataframes</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>hpi<span class="classifier">Pandas dataframe of shape (n_samples, 1)</span></dt><dd><p>HPI index data</p>
+</dd>
+<dt>folder_path<span class="classifier">str</span></dt><dd><p>a folder path in which google trends data are stored.</p>
+</dd>
+<dt>RE_companies<span class="classifier">list of strs, default = None</span></dt><dd><p>Name of real estate companies selected to constitute aggregate search of companies index.</p>
+</dd>
+</dl>
+</section>
+<section id="returns">
+<h2>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h2>
+<p>df : pandas dataframe including HPI and all search queries
+df_full : pandas dataframe including HPI and search queries that have real value since 2004-01-01
+df_full_nonzero : pandas dataframe including HPI and search queries that have real value since 2004-01-01 and do not have values equal to zero
+df_part : pandas dataframe including HPI and search queries that are not in df_full</p>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.reg_trend_selector">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">reg_trend_selector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">series</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#reg_trend_selector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.reg_trend_selector" title="Link to this definition"></a></dt>
+<dd><p>Determine the appropriate trend model for a time series based on the Augmented Dickey-Fuller (ADF) test.</p>
+<section id="id1">
+<h2>Parameters<a class="headerlink" href="#id1" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>series<span class="classifier">pd.Series</span></dt><dd><p>The time series data to be analyzed.</p>
+</dd>
+<dt>train_cut<span class="classifier">str or pd.Timestamp</span></dt><dd><p>The date or index that defines the end of the training period.</p>
+</dd>
+<dt>alpha<span class="classifier">float</span></dt><dd><p>The significance level used to assess the p-value from the ADF test.</p>
+</dd>
+<dt>recursive<span class="classifier">bool</span></dt><dd><p>If True, the function will recursively difference the series until stationarity is achieved, based on the ADF test.</p>
+</dd>
+</dl>
+</section>
+<section id="id2">
+<h2>Returns<a class="headerlink" href="#id2" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>series<span class="classifier">pd.Series</span></dt><dd><p>The original or differenced time series, depending on the ADF test results.</p>
+</dd>
+<dt>trend_cols<span class="classifier">list of str</span></dt><dd><p>A list of columns corresponding to the appropriate trend model, which may include:
+- ‘const’ : Constant term
+- ‘t’     : Linear time trend
+- ‘t2’    : Quadratic time trend</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h2>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The function performs the ADF test on the training period of the series with different trend models (‘c’, ‘ct’, and ‘ctt’).</p></li>
+<li><p>If the null hypothesis of the ADF test (that the series has a unit root) is not rejected at the given <cite>alpha</cite> level, the function recursively differences the series if <cite>recursive</cite> is set to True.</p></li>
+<li><p>The trend model is chosen based on the significance of the ADF test with different trend components.</p></li>
+</ul>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">series</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(),</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;2000-01-01&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">series</span><span class="p">,</span> <span class="n">trend_cols</span> <span class="o">=</span> <span class="n">reg_trend_selector</span><span class="p">(</span><span class="n">series</span><span class="p">,</span> <span class="n">train_cut</span><span class="o">=</span><span class="s1">&#39;2000-12-31&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span> <span class="n">recursive</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">    The function returns the appropriately differenced series and the trend model to be used.</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.reg_detrend_deseasonal">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">reg_detrend_deseasonal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deseasonal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ct'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">recursive</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#reg_detrend_deseasonal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.reg_detrend_deseasonal" title="Link to this definition"></a></dt>
+<dd><p>Detrend and/or deseasonalize a DataFrame using linear regression.</p>
+<section id="id3">
+<h2>Parameters<a class="headerlink" href="#id3" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>df<span class="classifier">pd.DataFrame</span></dt><dd><p>The time series data to be detrended and/or deseasonalized. Each column is treated as a separate time series.</p>
+</dd>
+<dt>train_cut<span class="classifier">str, int, float, or pd.Timestamp</span></dt><dd><p>The date or index that defines the end of the training period. If a float between 0 and 1 is provided, it represents a fraction of the total dataset length.</p>
+</dd>
+<dt>deseasonal<span class="classifier">bool</span></dt><dd><p>If True, the function removes the seasonal component from the series using monthly dummies.</p>
+</dd>
+<dt>detrend<span class="classifier">bool</span></dt><dd><p>If True, the function removes the trend component from the series based on the specified regression model.</p>
+</dd>
+<dt>regression<span class="classifier">{‘c’, ‘ct’, ‘ctt’}, optional</span></dt><dd><p>The type of trend model to be used:
+- ‘c’ : Constant term only (default).
+- ‘ct’ : Constant and linear trend.
+- ‘ctt’ : Constant, linear, and quadratic trend.
+If None, the function automatically selects the trend model based on the Augmented Dickey-Fuller (ADF) test.</p>
+</dd>
+<dt>alpha<span class="classifier">float, optional</span></dt><dd><p>The significance level used for the ADF test when automatically selecting the trend model. Default is 0.1.</p>
+</dd>
+<dt>recursive<span class="classifier">bool, optional</span></dt><dd><p>If True, the function recursively differences the series until stationarity is achieved, based on the ADF test.</p>
+</dd>
+<dt>col<span class="classifier">list of str, optional</span></dt><dd><p>A list of column names in <cite>df</cite> to be processed. If None, all columns are processed. Default is None.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h2>Returns<a class="headerlink" href="#id4" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with the detrended and/or deseasonalized series. The trend and seasonal components are removed according to the specified parameters.</p>
+</dd>
+</dl>
+</section>
+<section id="id5">
+<h2>Notes<a class="headerlink" href="#id5" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The function adds a constant (<cite>const</cite>), linear time trend (<cite>t</cite>), and quadratic time trend (<cite>t2</cite>) to the DataFrame as potential regressors.</p></li>
+<li><p>Monthly dummy variables are generated and used to remove seasonality if <cite>deseasonal</cite> is True.</p></li>
+<li><p>The function determines the appropriate trend model using the ADF test if <cite>regression</cite> is set to None.</p></li>
+<li><p>The function drops the additional columns (<cite>const</cite>, <cite>t</cite>, <cite>t2</cite>, and seasonal dummies) before returning the final DataFrame.</p></li>
+</ul>
+</section>
+<section id="id6">
+<h2>Examples<a class="headerlink" href="#id6" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;HPI&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;2000-01-01&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df_detrended</span> <span class="o">=</span> <span class="n">reg_detrend_deseasonal</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">train_cut</span><span class="o">=</span><span class="s1">&#39;2005-01-01&#39;</span><span class="p">,</span> <span class="n">deseasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;ct&#39;</span><span class="p">)</span>
+<span class="go">    This example removes both trend and seasonality from the &#39;HPI&#39; series in `df` using a linear trend model with a constant and linear trend.</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.MA_detrend_deseasonal">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">MA_detrend_deseasonal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_cut</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deseasonal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#MA_detrend_deseasonal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.MA_detrend_deseasonal" title="Link to this definition"></a></dt>
+<dd><p>Detrend and/or deseasonalize a DataFrame using moving average decomposition.</p>
+<section id="id7">
+<h2>Parameters<a class="headerlink" href="#id7" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>df<span class="classifier">pd.DataFrame</span></dt><dd><p>The time series data to be detrended and/or deseasonalized. Each column is treated as a separate time series.</p>
+</dd>
+<dt>train_cut<span class="classifier">str, int, float, or pd.Timestamp</span></dt><dd><p>The date or index that defines the end of the training period. If a float between 0 and 1 is provided, it represents a fraction of the total dataset length.</p>
+</dd>
+<dt>deseasonal<span class="classifier">bool</span></dt><dd><p>If True, the function removes the seasonal component from the series using moving average decomposition.</p>
+</dd>
+<dt>detrend<span class="classifier">bool</span></dt><dd><p>If True, the function removes the trend component from the series using moving average decomposition.</p>
+</dd>
+<dt>col<span class="classifier">list of str, optional</span></dt><dd><p>A list of column names in <cite>df</cite> to be processed. If None, all columns are processed. Default is None.</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h2>Returns<a class="headerlink" href="#id8" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with the detrended and/or deseasonalized series. The trend and seasonal components are removed according to the specified parameters.</p>
+</dd>
+</dl>
+</section>
+<section id="id9">
+<h2>Notes<a class="headerlink" href="#id9" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The function uses <cite>seasonal_decompose</cite> from <cite>statsmodels.tsa</cite> to perform the moving average decomposition.</p></li>
+<li><p>The <cite>deseasonal</cite> parameter removes the seasonal component using the seasonal decomposition from the training set.</p></li>
+<li><p>The trend component is removed by subtracting the moving average trend calculated from the entire series.</p></li>
+<li><p>The function creates a temporary column for month (<cite>month</cite>) to align seasonal adjustments, which is dropped before returning the final DataFrame.</p></li>
+</ul>
+</section>
+<section id="id10">
+<h2>Examples<a class="headerlink" href="#id10" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;HPI&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;2000-01-01&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">df_ma_detrended</span> <span class="o">=</span> <span class="n">MA_detrend_deseasonal</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">train_cut</span><span class="o">=</span><span class="s1">&#39;2005-01-01&#39;</span><span class="p">,</span> <span class="n">deseasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">    This example removes both trend and seasonality from the &#39;HPI&#39; series in `df` using moving average decomposition.</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.prepare_gtrends">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">prepare_gtrends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deseasonal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ct'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winsorize_trends</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#prepare_gtrends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.prepare_gtrends" title="Link to this definition"></a></dt>
+<dd><p>Prepares Google Trends data by applying optional transformations such as detrending, deseasonalizing, smoothing, and logging.
+There are two ways when deterend=False and deseasonal=True. 
+The first way is to just directly calculate the seasonal effect. 
+The other way is that first calculate the trend, subtract it from series and then calculate the seasonal factors. Then subtract the seasonal factor from the original series.
+In this way we include trend and residuals in the series that we return as a result, and exclude seasonal factors.
+In this function,’growth’ method uses the first way and ‘MA’ and ‘reg’ methods use the second.</p>
+<section id="id11">
+<h2>Parameters<a class="headerlink" href="#id11" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>df<span class="classifier">pd.DataFrame</span></dt><dd><p>A DataFrame where the first column is the dependent variable (e.g., HPI) and the remaining columns are Google Trends data.</p>
+</dd>
+<dt>detrend<span class="classifier">bool, optional</span></dt><dd><p>If True, the function removes the trend component from the Google Trends data.</p>
+</dd>
+<dt>deseasonal<span class="classifier">bool, optional</span></dt><dd><p>If True, the function removes the seasonal component from the Google Trends data.</p>
+</dd>
+<dt>method<span class="classifier">str, optional</span></dt><dd><p>The method used for detrending and/or deseasonalizing. Options are ‘reg’ for regression-based, ‘MA’ for moving average, or ‘growth’ for differencing. Default is ‘reg’.</p>
+</dd>
+<dt>regression<span class="classifier">str, optional</span></dt><dd><p>The type of regression to use for detrending. Options are ‘c’ (constant), ‘ct’ (constant + trend), or ‘ctt’ (constant + trend + quadratic trend). Used only if <cite>method=’reg’</cite>. Default is ‘ct’.</p>
+</dd>
+<dt>alpha<span class="classifier">float, optional</span></dt><dd><p>The significance level for the augmented Dickey-Fuller test used in the regression-based method. Default is 0.15.</p>
+</dd>
+<dt>log<span class="classifier">bool, optional</span></dt><dd><p>If True, log-transform the Google Trends data by applying <cite>log(X + 1)</cite> to avoid taking the logarithm of zero. Default is False.</p>
+</dd>
+<dt>smooth<span class="classifier">int or bool, optional</span></dt><dd><p>The smoothing window size. If an integer is provided, it specifies the window size for the seasonal decomposition trend smoothing. If True, a default window size of 12 is used. Default is 12.</p>
+</dd>
+<dt>winsorize_trends<span class="classifier">bool, optional</span></dt><dd><p>If True, winsorizes the Google Trends data by applying limits of 0.05 on both ends to reduce the impact of outliers. Default is False.</p>
+</dd>
+<dt>train_cut<span class="classifier">float or str or pd.Timestamp, optional</span></dt><dd><p>The point at which to split the data into training and testing. If a float between 0 and 1 is provided, it represents a fraction of the total dataset length. If a string or timestamp is provided, it is used directly as a cutoff date. Default is 0.8.</p>
+</dd>
+</dl>
+</section>
+<section id="id12">
+<h2>Returns<a class="headerlink" href="#id12" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with the dependent variable and the transformed Google Trends data. The exact transformations depend on the provided parameters.</p>
+</dd>
+</dl>
+</section>
+<section id="raises">
+<h2>Raises<a class="headerlink" href="#raises" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>Exception</dt><dd><p>If an invalid <cite>method</cite> is specified.</p>
+</dd>
+</dl>
+</section>
+<section id="id13">
+<h2>Notes<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The <cite>method</cite> parameter determines how the detrending and/or deseasonalizing is performed. ‘reg’ uses regression-based methods, ‘MA’ uses moving averages, and ‘growth’ uses differencing.</p></li>
+<li><p>The <cite>smooth</cite> parameter can be used to apply additional smoothing using seasonal decomposition.</p></li>
+<li><p>The <cite>log</cite> transformation is applied after winsorizing if both are enabled.</p></li>
+<li><p>The final DataFrame returned is merged on the index of the dependent variable and the transformed Google Trends data, ensuring alignment.</p></li>
+</ul>
+</section>
+<section id="id14">
+<h2>Examples<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;HPI&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(),</span> <span class="s1">&#39;trend&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">)},</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;2000-01-01&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prepared_df</span> <span class="o">=</span> <span class="n">prepare_gtrends</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">deseasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;MA&#39;</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span>
+<span class="go">    This example removes trend and seasonality using the moving average method and applies a smoothing window of 6 periods to the &#39;trend&#39; data.</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.prepare_hpi">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">prepare_hpi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">detrend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deseasonal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ct'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#prepare_hpi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.prepare_hpi" title="Link to this definition"></a></dt>
+<dd><p>Prepares the Housing Price Index (HPI) data by applying optional transformations such as detrending, deseasonalizing, and logging.</p>
+<section id="id15">
+<h2>Parameters<a class="headerlink" href="#id15" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>df<span class="classifier">pd.DataFrame</span></dt><dd><p>A DataFrame containing at least a column labeled ‘HPI’, representing the Housing Price Index.</p>
+</dd>
+<dt>detrend<span class="classifier">bool, optional</span></dt><dd><p>If True, removes the trend component from the HPI data. Default is False.</p>
+</dd>
+<dt>deseasonal<span class="classifier">bool, optional</span></dt><dd><p>If True, removes the seasonal component from the HPI data. Default is False.</p>
+</dd>
+<dt>method<span class="classifier">str, optional</span></dt><dd><p>The method used for detrending and/or deseasonalizing. Options are ‘reg’ for regression-based or ‘MA’ for moving average. Default is ‘reg’.</p>
+</dd>
+<dt>regression<span class="classifier">str, optional</span></dt><dd><p>The type of regression to use for detrending. Options are ‘c’ (constant), ‘ct’ (constant + trend), or ‘ctt’ (constant + trend + quadratic trend). Used only if <cite>method=’reg’</cite>. Default is ‘ct’.</p>
+</dd>
+<dt>alpha<span class="classifier">float, optional</span></dt><dd><p>The significance level for the augmented Dickey-Fuller (ADF) test used in the regression-based method. Default is 0.15.</p>
+</dd>
+<dt>log<span class="classifier">bool, optional</span></dt><dd><p>If True, log-transforms the HPI data by applying <cite>log(HPI)</cite>. Default is False.</p>
+</dd>
+<dt>train_cut<span class="classifier">float or str or pd.Timestamp, optional</span></dt><dd><p>The point at which to split the data into training and testing. If a float between 0 and 1 is provided, it represents a fraction of the total dataset length. If a string or timestamp is provided, it is used directly as a cutoff date. Default is 0.8.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h2>Returns<a class="headerlink" href="#id16" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>pd.DataFrame</dt><dd><p>A DataFrame with the transformed HPI data, depending on the selected options for detrending, deseasonalizing, and logging.</p>
+</dd>
+</dl>
+</section>
+<section id="id17">
+<h2>Raises<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>Exception</dt><dd><p>If an attempt is made to detrend HPI using the Moving Average method.</p>
+</dd>
+</dl>
+</section>
+<section id="id18">
+<h2>Notes<a class="headerlink" href="#id18" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The function includes a log transformation option to stabilize variance, which is applied before any other transformations.</p></li>
+<li><p>Detrending using the Moving Average (MA) method is explicitly disallowed for the HPI, as indicated by an exception.</p></li>
+<li><p>The ADF test’s significance level (<cite>alpha</cite>) and type of regression used can significantly impact the detrending process, particularly in borderline cases.</p></li>
+</ul>
+</section>
+<section id="id19">
+<h2>Examples<a class="headerlink" href="#id19" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;HPI&#39;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()},</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;2000-01-01&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">prepared_df</span> <span class="o">=</span> <span class="n">prepare_hpi</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">deseasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;reg&#39;</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;ct&#39;</span><span class="p">)</span>
+<span class="go">    This example removes the trend and seasonality from the HPI data using a regression-based method with a constant and trend.</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.compute_weights">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">compute_weights</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">criteria</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_select</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_index</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coef_select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'abs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">power</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rank_based</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#compute_weights"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.compute_weights" title="Link to this definition"></a></dt>
+<dd><p>Computes weights for a set of criteria, selecting top variables or indices based on the specified selection method.</p>
+<section id="id20">
+<h2>Parameters<a class="headerlink" href="#id20" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>criteria<span class="classifier">pd.Series or pd.DataFrame</span></dt><dd><p>The data containing the criteria used to compute weights, such as coefficients or cross-validation errors.</p>
+</dd>
+<dt>var_select<span class="classifier">str</span></dt><dd><p>The selection method for the variables. Options include ‘EN’ (Elastic Net), ‘coef’ (coefficient), ‘tvalue’, ‘CV’ (cross-validation), or ‘IC’ (information criterion).</p>
+</dd>
+<dt>selection_index<span class="classifier">pd.Index or list, optional</span></dt><dd><p>The indices to consider for selection. If None, the entire index of <cite>criteria</cite> is used. Default is None.</p>
+</dd>
+<dt>coef_select<span class="classifier">str, optional</span></dt><dd><p>Method for selecting coefficients. Options are ‘abs’ for absolute values or ‘neg’ for negative values. Only relevant if <cite>var_select</cite> is ‘EN’, ‘coef’, or ‘tvalue’. Default is ‘abs’.</p>
+</dd>
+<dt>n<span class="classifier">int, optional</span></dt><dd><p>The number of top variables or indices to select based on the computed weights. Default is 10.</p>
+</dd>
+<dt>power<span class="classifier">int or float, optional</span></dt><dd><p>The exponent used to compute the weights. Higher powers give more weight to larger values (or smaller values if using <cite>var_select=’CV’</cite> or <cite>var_select=’IC’</cite>). Default is 4.</p>
+</dd>
+<dt>rank_based<span class="classifier">bool, optional</span></dt><dd><p>If True, weights are computed based on the rank of each criterion rather than its raw value. Default is False.</p>
+</dd>
+</dl>
+</section>
+<section id="id21">
+<h2>Returns<a class="headerlink" href="#id21" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>weights<span class="classifier">pd.Series</span></dt><dd><p>A series of computed weights corresponding to the criteria.</p>
+</dd>
+<dt>top_queries<span class="classifier">pd.Index or list</span></dt><dd><p>The top <cite>n</cite> indices or variables based on the computed weights.</p>
+</dd>
+</dl>
+</section>
+<section id="id22">
+<h2>Raises<a class="headerlink" href="#id22" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>ValueError</dt><dd><p>If an invalid value for <cite>var_select</cite> or <cite>coef_select</cite> is provided.</p>
+</dd>
+</dl>
+</section>
+<section id="id23">
+<h2>Notes<a class="headerlink" href="#id23" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The function supports both positive and negative selection of coefficients, depending on the <cite>coef_select</cite> parameter.</p></li>
+<li><p>When <cite>rank_based</cite> is True, the function ranks the criteria before computing the weights, which can be useful for stabilizing the selection process.</p></li>
+<li><p>The function supports two main types of selection: those based on coefficient magnitudes (‘EN’, ‘coef’, ‘tvalue’) and those based on error metrics (‘CV’, ‘IC’).</p></li>
+</ul>
+</section>
+<section id="id24">
+<h2>Examples<a class="headerlink" href="#id24" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">criteria</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">,</span> <span class="mf">0.7</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span><span class="p">,</span> <span class="n">top_queries</span> <span class="o">=</span> <span class="n">compute_weights</span><span class="p">(</span><span class="n">criteria</span><span class="p">,</span> <span class="n">var_select</span><span class="o">=</span><span class="s1">&#39;coef&#39;</span><span class="p">,</span> <span class="n">coef_select</span><span class="o">=</span><span class="s1">&#39;abs&#39;</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+<span class="go">A    0.061926</span>
+<span class="go">B    0.142322</span>
+<span class="go">C    0.388067</span>
+<span class="go">D    0.100637</span>
+<span class="go">E    0.307048</span>
+<span class="go">dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">top_queries</span><span class="p">)</span>
+<span class="go">Index([&#39;C&#39;, &#39;E&#39;, &#39;B&#39;], dtype=&#39;object&#39;)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">criteria</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="mf">0.8</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.6</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;A&#39;</span><span class="p">,</span> <span class="s1">&#39;B&#39;</span><span class="p">,</span> <span class="s1">&#39;C&#39;</span><span class="p">,</span> <span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="s1">&#39;E&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">weights</span><span class="p">,</span> <span class="n">top_queries</span> <span class="o">=</span> <span class="n">compute_weights</span><span class="p">(</span><span class="n">criteria</span><span class="p">,</span> <span class="n">var_select</span><span class="o">=</span><span class="s1">&#39;CV&#39;</span><span class="p">,</span> <span class="n">rank_based</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+<span class="go">A    0.214796</span>
+<span class="go">B    0.355939</span>
+<span class="go">C    0.131228</span>
+<span class="go">D    0.178110</span>
+<span class="go">E    0.119927</span>
+<span class="go">dtype: float64</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">top_queries</span><span class="p">)</span>
+<span class="go">Index([&#39;B&#39;, &#39;D&#39;], dtype=&#39;object&#39;)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.GT_plot">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">GT_plot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winsorize_trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GT_plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GT_plot" title="Link to this definition"></a></dt>
+<dd><p>Generate plots to visualize the relationship between the Housing Price Index (HPI) and a selected exogenous variable.</p>
+<section id="id25">
+<h2>Parameters<a class="headerlink" href="#id25" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>df<span class="classifier">pandas.DataFrame</span></dt><dd><p>The DataFrame containing the HPI and exogenous variables.</p>
+</dd>
+<dt>exog<span class="classifier">str</span></dt><dd><p>The name of the exogenous variable to be plotted and analyzed.</p>
+</dd>
+<dt>lag<span class="classifier">int</span></dt><dd><p>The lag to apply to the exogenous variable in the scatter plot and time series plot.</p>
+</dd>
+<dt>title<span class="classifier">str, optional</span></dt><dd><p>The title for the overall figure (default is None).</p>
+</dd>
+<dt>winsorize_trend<span class="classifier">bool, optional</span></dt><dd><p>If True, apply winsorization to the exogenous variable to limit the effect of outliers (default is False).</p>
+</dd>
+<dt>scaled<span class="classifier">bool, optional</span></dt><dd><p>If True, standardize the exogenous variable by removing the mean and scaling to unit variance (default is False).</p>
+</dd>
+</dl>
+</section>
+<section id="id26">
+<h2>Returns<a class="headerlink" href="#id26" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays a 2x2 grid of plots:
+- Top-left: Time series plot of HPI.
+- Top-right: Scatter plot of lagged exogenous variable vs. HPI.
+- Bottom-left: Time series plot of the lagged exogenous variable.
+- Bottom-right: (Removed) was intended for an additional plot, now removed.</p>
+</dd>
+</dl>
+</section>
+<section id="id27">
+<h2>Notes<a class="headerlink" href="#id27" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The function visualizes the relationship between HPI and a chosen exogenous variable by generating time series and scatter plots.</p></li>
+<li><p>If <cite>winsorize_trend</cite> is True, the exogenous variable is adjusted to mitigate the impact of extreme values.</p></li>
+<li><p>If <cite>scaled</cite> is True, the exogenous variable is standardized before being plotted.</p></li>
+<li><p>The bottom-right subplot (<cite>ax4</cite>) is intentionally removed, leaving three plots in the 2x2 grid.</p></li>
+</ul>
+</section>
+<section id="id28">
+<h2>Examples<a class="headerlink" href="#id28" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">GT_plot</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">exog</span><span class="o">=</span><span class="s1">&#39;Google_Trends_Search&#39;</span><span class="p">,</span> <span class="n">lag</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s1">&#39;Google Trends vs. HPI&#39;</span><span class="p">,</span> <span class="n">winsorize_trend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">    Displays the plots for the relationship between HPI and the Google Trends search data with a lag of 2.</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.plot_gtrends">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">plot_gtrends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exog</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winsorize_trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#plot_gtrends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.plot_gtrends" title="Link to this definition"></a></dt>
+<dd><p>Plot Google Trends data and its transformations over different stages of processing.</p>
+<section id="id29">
+<h2>Parameters<a class="headerlink" href="#id29" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>exog<span class="classifier">str or None</span></dt><dd><p>The exogenous variable (Google Trends search term) to be plotted. If None, the variable with the highest weight for the specified horizon <cite>h</cite> is selected.</p>
+</dd>
+<dt>h<span class="classifier">int</span></dt><dd><p>The forecast horizon to be used. If <cite>h</cite> is not in <cite>self.selection_h_list</cite>, the maximum value from <cite>self.selection_h_list</cite> is used.</p>
+</dd>
+<dt>winsorize_trend<span class="classifier">bool, optional</span></dt><dd><p>If True, the Google Trends data is winsorized (default is False).</p>
+</dd>
+<dt>scaled<span class="classifier">bool, optional</span></dt><dd><p>If True, the Google Trends data is scaled using standardization (default is False).</p>
+</dd>
+</dl>
+</section>
+<section id="id30">
+<h2>Returns<a class="headerlink" href="#id30" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays a series of plots showing the original Google Trends data, winsorized data, prepared Google Trends data, and the corresponding Housing Price Index (HPI) data.</p>
+</dd>
+</dl>
+</section>
+<section id="id31">
+<h2>Notes<a class="headerlink" href="#id31" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>This function visualizes the Google Trends data (<cite>exog</cite>) across different stages: original, after winsorization, after preparation, and after scaling.</p></li>
+<li><p>The <cite>h</cite> parameter specifies the forecast horizon, and the function adjusts the plots accordingly.</p></li>
+<li><p>If <cite>exog</cite> is not provided, the function automatically selects the best-performing Google Trends term based on predefined criteria.</p></li>
+<li><p>The vertical red dashed line in each plot indicates the cut-off point between training and validation data.</p></li>
+</ul>
+</section>
+<section id="id32">
+<h2>Examples<a class="headerlink" href="#id32" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot_gtrends</span><span class="p">(</span><span class="n">exog</span><span class="o">=</span><span class="s1">&#39;housing_market&#39;</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">winsorize_trend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">scaled</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="go">    Plots the Google Trends data for &#39;housing_market&#39; with winsorization and scaling applied at horizon 6.</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot_gtrends</span><span class="p">(</span><span class="n">exog</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">h</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
+<span class="go">    Automatically selects the best Google Trends term and plots it at horizon 3 without any additional processing.</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.plot_hsi">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">plot_hsi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hsi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#plot_hsi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.plot_hsi" title="Link to this definition"></a></dt>
+<dd><p>Plot the selected Housing Search Index (HSI) for different forecast horizons.</p>
+<section id="id33">
+<h2>Parameters<a class="headerlink" href="#id33" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>hsi<span class="classifier">str, optional</span></dt><dd><p>The specific HSI to be plotted. If None, the HSI with the highest weight for each forecast horizon (<cite>h</cite>) is selected (default is None).</p>
+</dd>
+</dl>
+</section>
+<section id="id34">
+<h2>Returns<a class="headerlink" href="#id34" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays the plots for the selected HSIs across the specified forecast horizons in <cite>self.selection_h_list</cite>.</p>
+</dd>
+</dl>
+</section>
+<section id="id35">
+<h2>Notes<a class="headerlink" href="#id35" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>This method generates a plot for each forecast horizon (<cite>h</cite>) in reverse order (starting from the longest horizon).</p></li>
+<li><p>If no specific <cite>hsi</cite> is provided, the method will automatically select and plot the HSI with the maximum weight for each <cite>h</cite> from <cite>self.criteria_dfs</cite>.</p></li>
+<li><p>The plots are created using the <cite>GT_plot</cite> function, which visualizes the relationship between the HPI and the selected HSI.</p></li>
+</ul>
+</section>
+<section id="id36">
+<h2>Examples<a class="headerlink" href="#id36" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">plot_hsi</span><span class="p">(</span><span class="n">hsi</span><span class="o">=</span><span class="s1">&#39;Sentiment_Index&#39;</span><span class="p">)</span>
+<span class="go">    Plots the specified &#39;Sentiment_Index&#39; for all horizons in the selection list.</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">plot_hsi</span><span class="p">()</span>
+<span class="go">    Automatically selects and plots the HSI with the maximum weight for each horizon in the selection list.</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.plot_improvement">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">plot_improvement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">obj_list</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">measure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MAFE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">9)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#plot_improvement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.plot_improvement" title="Link to this definition"></a></dt>
+<dd><p>Plot the Kernel Density Estimate (KDE) of improvement measures (MAFE/MSFE) for different models across forecast horizons.</p>
+<section id="id37">
+<h2>Parameters<a class="headerlink" href="#id37" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>obj_list<span class="classifier">list</span></dt><dd><p>A list of objects containing the results of the models to be compared. Each object should have <cite>MAFE_val_df_improve</cite> and <cite>MSFE_val_df_improve</cite> attributes.</p>
+</dd>
+<dt>measure<span class="classifier">str, optional</span></dt><dd><p>The performance measure to be plotted. Can be ‘MAFE’ (Mean Absolute Forecast Error) or ‘MSFE’ (Mean Squared Forecast Error). Default is ‘MAFE’.</p>
+</dd>
+<dt>h_list<span class="classifier">list, optional</span></dt><dd><p>The list of forecast horizons to be considered. If None, the horizons from the first object in <cite>obj_list</cite> will be used.</p>
+</dd>
+<dt>colors<span class="classifier">list, optional</span></dt><dd><p>List of colors to be used for plotting different models. If None, a default list of colors will be used.</p>
+</dd>
+<dt>labels<span class="classifier">list, optional</span></dt><dd><p>List of labels for the models in <cite>obj_list</cite>. If None, default labels (‘G1’, ‘G2’, …) will be generated.</p>
+</dd>
+<dt>figsize<span class="classifier">tuple, optional</span></dt><dd><p>Size of the figure. Default is (15, 9).</p>
+</dd>
+</dl>
+</section>
+<section id="id38">
+<h2>Returns<a class="headerlink" href="#id38" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays the KDE plots for the selected measure across the specified forecast horizons.</p>
+</dd>
+</dl>
+</section>
+<section id="id39">
+<h2>Notes<a class="headerlink" href="#id39" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>This function plots the density of the percentage improvement in MAFE/MSFE for different models over multiple forecast horizons (<cite>h</cite>).</p></li>
+<li><p>A vertical line is added to each plot to mark the performance of the Universal Housing Sentiment Index (UHSI) for the corresponding forecast horizon.</p></li>
+<li><p>If <cite>h_list</cite> is not provided, the forecast horizons from the first model in <cite>obj_list</cite> are used by default.</p></li>
+</ul>
+</section>
+<section id="id40">
+<h2>Examples<a class="headerlink" href="#id40" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">plot_improvement</span><span class="p">(</span><span class="n">models_list</span><span class="p">,</span> <span class="n">measure</span><span class="o">=</span><span class="s1">&#39;MAFE&#39;</span><span class="p">,</span> <span class="n">h_list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">12</span><span class="p">],</span> <span class="n">colors</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">],</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Model 1&#39;</span><span class="p">,</span> <span class="s1">&#39;Model 2&#39;</span><span class="p">])</span>
+<span class="go">    Plots the MAFE improvement KDE for the specified models and forecast horizons.</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="google_trends_functions.plot_forecast">
+<span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">plot_forecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">self</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exog</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#plot_forecast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.plot_forecast" title="Link to this definition"></a></dt>
+<dd><p>Plot the forecasted vs actual Housing Price Index (HPI) values over different forecast horizons.</p>
+<section id="id41">
+<h2>Parameters<a class="headerlink" href="#id41" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>exog<span class="classifier">str or list, optional</span></dt><dd><p>The exogenous variable(s) used in the forecasting models. If None, the best performing exogenous variable for each horizon is selected based on the criteria in <cite>self.forecast_criteria_df</cite>.</p>
+</dd>
+</dl>
+</section>
+<section id="id42">
+<h2>Returns<a class="headerlink" href="#id42" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays the forecast plots for the actual and predicted HPI across different forecast horizons.</p>
+</dd>
+</dl>
+</section>
+<section id="id43">
+<h2>Notes<a class="headerlink" href="#id43" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The function generates subplots for each forecast horizon <cite>h</cite> in <cite>self.h_list</cite>, displaying the actual and predicted HPI.</p></li>
+<li><p>If <cite>exog</cite> is a list, the corresponding element is used as the exogenous variable for each horizon. If <cite>exog</cite> is a single string, it is used for all horizons.</p></li>
+<li><p>The vertical red dashed line marks the cut-off point between the training and validation datasets.</p></li>
+</ul>
+</section>
+<section id="id44">
+<h2>Examples<a class="headerlink" href="#id44" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">plot_forecast</span><span class="p">(</span><span class="n">exog</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;UHSI_1&#39;</span><span class="p">,</span> <span class="s1">&#39;UHSI_3&#39;</span><span class="p">,</span> <span class="s1">&#39;UHSI_6&#39;</span><span class="p">])</span>
+<span class="go">    Plots the forecasts using the specified exogenous variables for each horizon.</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">model</span><span class="o">.</span><span class="n">plot_forecast</span><span class="p">(</span><span class="n">exog</span><span class="o">=</span><span class="s1">&#39;UHSI_3&#39;</span><span class="p">)</span>
+<span class="go">    Plots the forecasts using &#39;UHSI_3&#39; as the exogenous variable for all horizons.</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">google_trends_functions.</span></span><span class="sig-name descname"><span class="pre">GoogleTrend</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">df</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_cut</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.8</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pca_lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class for processing and modeling Google Trends data to predict housing prices.
+This class provides tools for preparing, transforming, and modeling time series data using methods such as detrending,
+deseasonalizing, principal component analysis (PCA), and lagged variable selection.</p>
+<section id="id45">
+<h2>Parameters<a class="headerlink" href="#id45" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>df<span class="classifier">pd.DataFrame</span></dt><dd><p>A DataFrame containing the initial dataset, including the Housing Price Index (HPI) and Google Trends data.</p>
+</dd>
+<dt>train_cut<span class="classifier">float, int, or str, optional</span></dt><dd><p>Defines the end of the training period. If a float between 0 and 1 is provided, it represents the fraction of the dataset used for training. Default is 0.8.</p>
+</dd>
+<dt>verbose<span class="classifier">bool, optional</span></dt><dd><p>If True, enables detailed output for logging purposes. Default is False.</p>
+</dd>
+<dt>seed<span class="classifier">int or None, optional</span></dt><dd><p>Seed for random number generation, used to ensure reproducibility. Default is None.</p>
+</dd>
+<dt>pca_lag<span class="classifier">bool, optional</span></dt><dd><p>If True, PCA with lagged variables is used during the feature extraction. Default is True.</p>
+</dd>
+</dl>
+</section>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>df<span class="classifier">pd.DataFrame</span></dt><dd><p>A copy of the initial dataset provided by the user.</p>
+</dd>
+<dt>train_cut<span class="classifier">pd.Timestamp</span></dt><dd><p>Timestamp or index defining the end of the training period.</p>
+</dd>
+<dt>verbose<span class="classifier">bool</span></dt><dd><p>Verbosity level for logging purposes.</p>
+</dd>
+<dt>seed<span class="classifier">int or None</span></dt><dd><p>Seed for random number generation.</p>
+</dd>
+<dt>pca_lag<span class="classifier">bool</span></dt><dd><p>Specifies whether PCA with lagged variables should be used.</p>
+</dd>
+<dt>gtrends_df<span class="classifier">pd.DataFrame</span></dt><dd><p>Transformed Google Trends data.</p>
+</dd>
+<dt>hpi_df<span class="classifier">pd.DataFrame</span></dt><dd><p>Transformed Housing Price Index (HPI) data.</p>
+</dd>
+<dt>hsi_df<span class="classifier">pd.DataFrame</span></dt><dd><p>Final set of features generated after processing HPI and Google Trends data.</p>
+</dd>
+<dt>hsi_dfs<span class="classifier">pd.DataFrame</span></dt><dd><p>Collection of transformed features including multiple PCA layers.</p>
+</dd>
+<dt>criteria_dfs<span class="classifier">pd.DataFrame</span></dt><dd><p>DataFrame containing computed criteria values for feature selection.</p>
+</dd>
+<dt>criteria_dfs_expanded<span class="classifier">pd.DataFrame</span></dt><dd><p>DataFrame containing expanded versions of computed criteria for feature selection.</p>
+</dd>
+<dt>forecast_hsi<span class="classifier">pd.DataFrame</span></dt><dd><p>The final set of features used for forecasting.</p>
+</dd>
+<dt>MAFE_val_df, MSFE_val_df, forecast_criteria_df, etc.</dt><dd><p>DataFrames and metrics representing model performance during the forecast.</p>
+</dd>
+</dl>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>prepare_gtrends(detrend=True, deseasonal=True, …)</dt><dd><p>Prepares Google Trends data by applying optional transformations such as detrending and deseasonalizing.</p>
+</dd>
+<dt>prepare_hpi(detrend=False, deseasonal=True, …)</dt><dd><p>Prepares the HPI data by applying optional transformations such as detrending and deseasonalizing.</p>
+</dd>
+<dt>compute_hsi(layer=1, …)</dt><dd><p>Extracts key features from the dataset using PCA, lagged variables, and selection criteria.</p>
+</dd>
+<dt>lag_setting(lag_select=’IC’, …)</dt><dd><p>Sets the lag selection criteria and related parameters for the model.</p>
+</dd>
+<dt>forecast(h_list=[1,3,6,12], …)</dt><dd><p>Forecasts the HPI using prepared Google Trends data and selected lags.</p>
+</dd>
+<dt>results(results_table=False, …)</dt><dd><p>Displays various results from the model, including performance metrics.</p>
+</dd>
+<dt>plot_gtrends(exog=None, …)</dt><dd><p>Plots Google Trends data used in the model.</p>
+</dd>
+<dt>plot_hsi(hsi=None)</dt><dd><p>Plots HSI data used in the model.</p>
+</dd>
+<dt>plot_improvement(measure=’MAFE’, …)</dt><dd><p>Plots improvements in forecasting accuracy based on specified performance measures.</p>
+</dd>
+<dt>plot_forecast(exog=None)</dt><dd><p>Plots the forecasted HPI based on the selected model features.</p>
+</dd>
+</dl>
+</section>
+<section id="id46">
+<h2>Examples<a class="headerlink" href="#id46" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">GT_object</span> <span class="o">=</span> <span class="n">GoogleTrend</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="s1">&#39;2019-12-31&#39;</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">pca_lag</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GT_object</span><span class="o">.</span><span class="n">prepare_gtrends</span><span class="p">(</span><span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">deseasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;reg&#39;</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;ct&#39;</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GT_object</span><span class="o">.</span><span class="n">prepare_hpi</span><span class="p">(</span><span class="n">detrend</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">deseasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="s1">&#39;reg&#39;</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;ct&#39;</span><span class="p">,</span> <span class="n">log</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GT_object</span><span class="o">.</span><span class="n">compute_hsi</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">input_pool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">auto_layer</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">n_input</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_hsi</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">max_lag</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">var_select</span><span class="o">=</span><span class="s1">&#39;CV&#39;</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="s1">&#39;rnd&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">selection_h_list</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">12</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GT_object</span><span class="o">.</span><span class="n">compute_hsi</span><span class="p">(</span><span class="n">layer</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">input_pool</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">auto_layer</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_input</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n_hsi</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">max_lag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">var_select</span><span class="o">=</span><span class="s1">&#39;CV&#39;</span><span class="p">,</span> <span class="n">random</span><span class="o">=</span><span class="s1">&#39;rnd&#39;</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">selection_h_list</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">12</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GT_object</span><span class="o">.</span><span class="n">lag_setting</span><span class="p">(</span><span class="n">y_lags</span><span class="o">=</span><span class="s1">&#39;Auto&#39;</span><span class="p">,</span> <span class="n">exog_lags</span><span class="o">=</span><span class="s1">&#39;Auto&#39;</span><span class="p">,</span> <span class="n">max_lag</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lag_select</span><span class="o">=</span><span class="s1">&#39;IC&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GT_object</span><span class="o">.</span><span class="n">forecast</span><span class="p">(</span><span class="n">h_list</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">12</span><span class="p">],</span> <span class="n">seasonal</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">hsi_CV_select</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fit_intercept</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">cv</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">original_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">GT_object</span><span class="o">.</span><span class="n">results</span><span class="p">(</span><span class="n">MAFE_val_df</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">MAFE_val_df_improve</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">forecast_criteria_df</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">lags_df</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">head</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend.prepare_gtrends">
+<span class="sig-name descname"><span class="pre">prepare_gtrends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">detrend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deseasonal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ct'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">smooth</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winsorize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend.prepare_gtrends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend.prepare_gtrends" title="Link to this definition"></a></dt>
+<dd><p>Prepares Google Trends data by applying optional transformations such as detrending, deseasonalizing, smoothing, and logging.</p>
+<section id="id47">
+<h3>Parameters<a class="headerlink" href="#id47" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>detrend<span class="classifier">bool, optional</span></dt><dd><p>If True, removes the trend component from the Google Trends data. Default is True.</p>
+</dd>
+<dt>deseasonal<span class="classifier">bool, optional</span></dt><dd><p>If True, removes the seasonal component from the Google Trends data. Default is True.</p>
+</dd>
+<dt>method<span class="classifier">str, optional</span></dt><dd><p>The method used for detrending and/or deseasonalizing. Options are ‘reg’ for regression-based, ‘MA’ for moving average, or ‘growth’ for differencing. Default is ‘reg’.</p>
+</dd>
+<dt>regression<span class="classifier">str, optional</span></dt><dd><p>The type of regression to use for detrending. Options are ‘c’ (constant), ‘ct’ (constant + trend), or ‘ctt’ (constant + trend + quadratic trend). Used only if <cite>method=’reg’</cite>. Default is ‘ct’.</p>
+</dd>
+<dt>alpha<span class="classifier">float, optional</span></dt><dd><p>The significance level for the augmented Dickey-Fuller (ADF) test used in the regression-based method. Default is 0.15.</p>
+</dd>
+<dt>log<span class="classifier">bool, optional</span></dt><dd><p>If True, log-transforms the Google Trends data by applying <cite>log(X + 1)</cite> to stabilize variance. Default is False.</p>
+</dd>
+<dt>smooth<span class="classifier">bool or int, optional</span></dt><dd><p>If True, applies smoothing using a default window of 12. If an integer is provided, it specifies the window size for smoothing. Default is False.</p>
+</dd>
+<dt>winsorize<span class="classifier">bool, optional</span></dt><dd><p>If True, applies winsorization to the Google Trends data to reduce the effect of outliers. Default is False.</p>
+</dd>
+</dl>
+</section>
+<section id="id48">
+<h3>Returns<a class="headerlink" href="#id48" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Updates the <cite>gtrends_df</cite> attribute with the prepared Google Trends data after applying the specified transformations.</p>
+</dd>
+</dl>
+</section>
+<section id="id49">
+<h3>Notes<a class="headerlink" href="#id49" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>This method prepares the Google Trends data for further modeling by optionally removing trend and seasonal components, smoothing, and log-transforming the data.</p></li>
+<li><p>The <cite>method</cite> parameter determines the approach for detrending and deseasonalizing, allowing flexibility in how these transformations are applied.</p></li>
+<li><p>The transformations help stabilize the data, improve stationarity, and reduce the impact of outliers, which can enhance the performance of downstream models.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend.prepare_hpi">
+<span class="sig-name descname"><span class="pre">prepare_hpi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">detrend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deseasonal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">method</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'reg'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'ct'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alpha</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.15</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">log</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend.prepare_hpi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend.prepare_hpi" title="Link to this definition"></a></dt>
+<dd><p>Prepares the Housing Price Index (HPI) data by applying optional transformations such as detrending, deseasonalizing, and logging.</p>
+<section id="id50">
+<h3>Parameters<a class="headerlink" href="#id50" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>detrend<span class="classifier">bool, optional</span></dt><dd><p>If True, removes the trend component from the HPI data. Default is False.</p>
+</dd>
+<dt>deseasonal<span class="classifier">bool, optional</span></dt><dd><p>If True, removes the seasonal component from the HPI data. Default is True.</p>
+</dd>
+<dt>method<span class="classifier">str, optional</span></dt><dd><p>The method used for detrending and/or deseasonalizing. Options are ‘reg’ for regression-based or ‘MA’ for moving average. Default is ‘reg’.</p>
+</dd>
+<dt>regression<span class="classifier">str, optional</span></dt><dd><p>The type of regression to use for detrending. Options are ‘c’ (constant), ‘ct’ (constant + trend), or ‘ctt’ (constant + trend + quadratic trend). Used only if <cite>method=’reg’</cite>. Default is ‘ct’.</p>
+</dd>
+<dt>alpha<span class="classifier">float, optional</span></dt><dd><p>The significance level for the augmented Dickey-Fuller (ADF) test used in the regression-based method. Default is 0.15.</p>
+</dd>
+<dt>log<span class="classifier">bool, optional</span></dt><dd><p>If True, log-transforms the HPI data by applying <cite>log(HPI)</cite>. Default is False.</p>
+</dd>
+</dl>
+</section>
+<section id="id51">
+<h3>Returns<a class="headerlink" href="#id51" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Updates the <cite>hpi_df</cite> attribute with the prepared HPI data after applying the specified transformations.</p>
+</dd>
+</dl>
+</section>
+<section id="id52">
+<h3>Notes<a class="headerlink" href="#id52" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>This method prepares the Housing Price Index (HPI) data for further modeling by optionally removing trend and seasonal components and applying a log transformation.</p></li>
+<li><p>The <cite>method</cite> parameter determines how the detrending and deseasonalizing are applied, offering flexibility in transformations.</p></li>
+<li><p>The transformations help in stabilizing the variance, improving stationarity, and making the data suitable for time series modeling and forecasting.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend.compute_hsi">
+<span class="sig-name descname"><span class="pre">compute_hsi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">input_pool</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_layer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_input</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_hsi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'CV'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">random</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alphas</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">l1_ratio</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.1,</span> <span class="pre">0.5,</span> <span class="pre">0.7,</span> <span class="pre">0.9,</span> <span class="pre">0.95,</span> <span class="pre">0.99,</span> <span class="pre">1]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">selection_h_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0,</span> <span class="pre">1,</span> <span class="pre">3,</span> <span class="pre">6,</span> <span class="pre">12]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">coef_select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'abs'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">criteria_dis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend.compute_hsi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend.compute_hsi" title="Link to this definition"></a></dt>
+<dd><p>Extracts key features from the dataset using Principal Component Analysis (PCA), lagged variables, and feature selection criteria.</p>
+<section id="id53">
+<h3>Parameters<a class="headerlink" href="#id53" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>layer<span class="classifier">int, optional</span></dt><dd><p>The current layer of PCA and feature extraction. Default is 1.</p>
+</dd>
+<dt>input_pool<span class="classifier">bool, optional</span></dt><dd><p>If True, the full input feature pool is used during the feature extraction. Default is True.</p>
+</dd>
+<dt>auto_layer<span class="classifier">bool, optional</span></dt><dd><p>If True, additional layers are added automatically until no improvement is observed. Default is False.</p>
+</dd>
+<dt>n_input<span class="classifier">int, optional</span></dt><dd><p>Number of input features to select. Default is 10.</p>
+</dd>
+<dt>n_hsi<span class="classifier">int, optional</span></dt><dd><p>Number of HSI (Housing Sentiment Index) features to compute. Default is 20.</p>
+</dd>
+<dt>max_lag<span class="classifier">int, optional</span></dt><dd><p>Maximum lag to consider for lagged features. Default is 3.</p>
+</dd>
+<dt>var_select<span class="classifier">str, optional</span></dt><dd><p>The method used for variable selection. Options include ‘CV’, ‘EN’, ‘coef’, or ‘tvalue’. Default is ‘CV’.</p>
+</dd>
+<dt>random<span class="classifier">bool or str, optional</span></dt><dd><p>If True or set to ‘intc’ or ‘rnd’, a randomized selection process is used. Default is False.</p>
+</dd>
+<dt>cv<span class="classifier">int, optional</span></dt><dd><p>Number of cross-validation folds. Default is 3.</p>
+</dd>
+<dt>shuffle<span class="classifier">bool, optional</span></dt><dd><p>If True, shuffle the data during cross-validation. Default is True.</p>
+</dd>
+<dt>n_iter<span class="classifier">int, optional</span></dt><dd><p>Number of iterations for randomized search or selection. Default is 20.</p>
+</dd>
+<dt>alphas<span class="classifier">array-like, optional</span></dt><dd><p>Array of alpha values for ElasticNetCV. Default is np.logspace(-3, 0, 100).</p>
+</dd>
+<dt>l1_ratio<span class="classifier">list, optional</span></dt><dd><p>List of L1 ratios for ElasticNetCV. Default is [.1, .5, .7, .9, .95, .99, 1].</p>
+</dd>
+<dt>selection_h_list<span class="classifier">list of int, optional</span></dt><dd><p>List of lag periods to consider for selection. Default is [0, 1, 3, 6, 12].</p>
+</dd>
+<dt>coef_select<span class="classifier">str, optional</span></dt><dd><p>Method for selecting coefficients (‘abs’ for absolute values or ‘neg’ for negative values). Default is ‘abs’.</p>
+</dd>
+<dt>criteria_dis<span class="classifier">bool, optional</span></dt><dd><p>If True, displays criteria DataFrames used in feature selection. Default is False.</p>
+</dd>
+</dl>
+</section>
+<section id="id54">
+<h3>Returns<a class="headerlink" href="#id54" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Updates the attributes <cite>hsi_df</cite>, <cite>hsi_dfs</cite>, <cite>X_scaled_lagged_full</cite>, <cite>criteria_dfs</cite>, and <cite>forecast_hsi</cite> with the newly computed features and criteria.</p>
+</dd>
+</dl>
+</section>
+<section id="id55">
+<h3>Notes<a class="headerlink" href="#id55" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>This method uses PCA for dimensionality reduction and lagged variable selection to generate new features.</p></li>
+<li><p>Feature selection is based on different criteria, including ElasticNet coefficients, cross-validation metrics, and other statistics.</p></li>
+<li><p>The process can include both deterministic and randomized approaches to ensure robustness.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend.lag_setting">
+<span class="sig-name descname"><span class="pre">lag_setting</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y_lags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exog_lags</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Auto'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_lag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lag_select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'IC'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shuffle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'cross'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend.lag_setting"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend.lag_setting" title="Link to this definition"></a></dt>
+<dd><p>Sets the lag selection criteria and related parameters for the model.</p>
+<section id="id56">
+<h3>Parameters<a class="headerlink" href="#id56" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>lag_select<span class="classifier">str, optional</span></dt><dd><p>The method used for selecting the lag order. Options include ‘IC’ (information criterion), ‘CV’ (cross-validation), etc. Default is ‘IC’.</p>
+</dd>
+<dt>fit_intercept<span class="classifier">bool, optional</span></dt><dd><p>If True, fits an intercept in the lag model. Default is False.</p>
+</dd>
+<dt>cv<span class="classifier">int, optional</span></dt><dd><p>Number of cross-validation folds to use when selecting lags. Default is 5.</p>
+</dd>
+<dt>shuffle<span class="classifier">bool, optional</span></dt><dd><p>If True, shuffle the data during cross-validation. Default is True.</p>
+</dd>
+<dt>n_iter<span class="classifier">int, optional</span></dt><dd><p>Number of iterations to use during randomized cross-validation or lag selection. Default is 20.</p>
+</dd>
+<dt>var_order<span class="classifier">str, optional</span></dt><dd><p>The order in which variables are considered for lag selection. Options include ‘cross’ (cross-sectional ordering) and others. Default is ‘cross’.</p>
+</dd>
+<dt>max_lag<span class="classifier">int, optional</span></dt><dd><p>The maximum lag to consider for the model. Default is 3.</p>
+</dd>
+<dt>y_lags<span class="classifier">str or int, optional</span></dt><dd><p>The number of lags for the target variable (<cite>y</cite>). If ‘Auto’, the lag length is automatically determined. Default is ‘Auto’.</p>
+</dd>
+<dt>exog_lags<span class="classifier">str or int, optional</span></dt><dd><p>The number of lags for the exogenous variables (<cite>exog</cite>). If ‘Auto’, the lag length is automatically determined. Default is ‘Auto’.</p>
+</dd>
+</dl>
+</section>
+<section id="id57">
+<h3>Returns<a class="headerlink" href="#id57" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Updates the lag-related attributes of the instance, such as <cite>lag_select</cite>, <cite>lag_fit_intercept</cite>, <cite>lag_cv</cite>, and others.</p>
+</dd>
+</dl>
+</section>
+<section id="id58">
+<h3>Notes<a class="headerlink" href="#id58" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>This method sets the parameters for the lag selection process, which determines the temporal dependencies in the model.</p></li>
+<li><p>The selection can be done using either information criteria or cross-validation approaches.</p></li>
+<li><p>The <cite>var_order</cite> parameter controls the order in which variables are processed for lag determination, which can impact model performance.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend.forecast">
+<span class="sig-name descname"><span class="pre">forecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">h_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[1,</span> <span class="pre">3,</span> <span class="pre">6,</span> <span class="pre">12]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seasonal</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hsi_CV_select</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fit_intercept</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_iter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">original_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'criteria'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_col</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend.forecast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend.forecast" title="Link to this definition"></a></dt>
+<dd><p>Forecasts the Housing Price Index (HPI) using prepared Google Trends data and selected lag features.</p>
+<section id="id59">
+<h3>Parameters<a class="headerlink" href="#id59" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>h_list<span class="classifier">list of int, optional</span></dt><dd><p>A list of forecast horizons for which the predictions will be made. Default is [1, 3, 6, 12].</p>
+</dd>
+<dt>seasonal<span class="classifier">bool, optional</span></dt><dd><p>If True, includes seasonal components in the model during forecasting. Default is False.</p>
+</dd>
+<dt>hsi_CV_select<span class="classifier">bool, optional</span></dt><dd><p>If True, uses cross-validation for selecting the Housing Sentiment Index (HSI) features. Default is False.</p>
+</dd>
+<dt>fit_intercept<span class="classifier">bool, optional</span></dt><dd><p>If True, fits an intercept term in the forecasting model. Default is False.</p>
+</dd>
+<dt>cv<span class="classifier">int, optional</span></dt><dd><p>Number of cross-validation folds for model validation. Default is 4.</p>
+</dd>
+<dt>n_iter<span class="classifier">int, optional</span></dt><dd><p>Number of iterations to use during cross-validation or parameter tuning. Default is 100.</p>
+</dd>
+<dt>original_scale<span class="classifier">bool, optional</span></dt><dd><p>If True, the forecasted values are converted back to their original scale. Default is True.</p>
+</dd>
+<dt>sort_df<span class="classifier">str, optional</span></dt><dd><p>The method used to sort the features for the forecast model. Options include ‘criteria’. Default is ‘criteria’.</p>
+</dd>
+<dt>sort_col<span class="classifier">int, optional</span></dt><dd><p>The column index to use for sorting when selecting features. Default is -1 (the last column).</p>
+</dd>
+</dl>
+</section>
+<section id="id60">
+<h3>Returns<a class="headerlink" href="#id60" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Updates the attributes with forecast results, including various performance metrics and forecast data.</p>
+</dd>
+</dl>
+</section>
+<section id="attributes-updated">
+<h3>Attributes Updated<a class="headerlink" href="#attributes-updated" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>MAFE_val_df<span class="classifier">pd.DataFrame</span></dt><dd><p>Mean Absolute Forecasting Error (MAFE) values for the validation set.</p>
+</dd>
+<dt>MAFE_val_df_improve<span class="classifier">pd.DataFrame</span></dt><dd><p>Improvement in MAFE values compared to a benchmark.</p>
+</dd>
+<dt>MSFE_val_df<span class="classifier">pd.DataFrame</span></dt><dd><p>Mean Squared Forecasting Error (MSFE) values for the validation set.</p>
+</dd>
+<dt>MSFE_val_df_improve<span class="classifier">pd.DataFrame</span></dt><dd><p>Improvement in MSFE values compared to a benchmark.</p>
+</dd>
+<dt>forecast_criteria_df<span class="classifier">pd.DataFrame</span></dt><dd><p>DataFrame containing criteria values used for selecting features during forecasting.</p>
+</dd>
+<dt>lags_df<span class="classifier">pd.DataFrame</span></dt><dd><p>DataFrame representing the lags used for each feature in the model.</p>
+</dd>
+<dt>MAFE_train_df<span class="classifier">pd.DataFrame</span></dt><dd><p>MAFE values for the training set.</p>
+</dd>
+<dt>MSFE_train_df<span class="classifier">pd.DataFrame</span></dt><dd><p>MSFE values for the training set.</p>
+</dd>
+<dt>forecast_dict<span class="classifier">dict</span></dt><dd><p>Dictionary containing forecasted values for different horizons.</p>
+</dd>
+<dt>hsi<span class="classifier">pd.DataFrame</span></dt><dd><p>DataFrame containing the forecasted HPI values.</p>
+</dd>
+<dt>results_table<span class="classifier">pd.DataFrame</span></dt><dd><p>Table summarizing the forecast results, including performance metrics.</p>
+</dd>
+</dl>
+</section>
+<section id="id61">
+<h3>Notes<a class="headerlink" href="#id61" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>This method forecasts the HPI using a combination of Google Trends data and selected lagged features.</p></li>
+<li><p>Various forecast horizons can be specified using the <cite>h_list</cite> parameter to produce forecasts for different time periods.</p></li>
+<li><p>The method can optionally fit an intercept term and use cross-validation to select the most important features.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend.results">
+<span class="sig-name descname"><span class="pre">results</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">results_table</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MAFE_val_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MAFE_val_df_improve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MSFE_val_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MSFE_val_df_improve</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">forecast_criteria_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lags_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">MAFE_train_df</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">head</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend.results"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend.results" title="Link to this definition"></a></dt>
+<dd><p>Displays various results from the model, including performance metrics and forecast data.</p>
+<section id="id62">
+<h3>Parameters<a class="headerlink" href="#id62" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>results_table<span class="classifier">bool, optional</span></dt><dd><p>If True, displays the full results table summarizing the forecast performance. Default is False.</p>
+</dd>
+<dt>MAFE_val_df<span class="classifier">bool, optional</span></dt><dd><p>If True, displays the Mean Absolute Forecasting Error (MAFE) values for the validation set. Default is False.</p>
+</dd>
+<dt>MAFE_val_df_improve<span class="classifier">bool, optional</span></dt><dd><p>If True, displays the improvement in MAFE values compared to a benchmark. Default is False.</p>
+</dd>
+<dt>MSFE_val_df<span class="classifier">bool, optional</span></dt><dd><p>If True, displays the Mean Squared Forecasting Error (MSFE) values for the validation set. Default is False.</p>
+</dd>
+<dt>MSFE_val_df_improve<span class="classifier">bool, optional</span></dt><dd><p>If True, displays the improvement in MSFE values compared to a benchmark. Default is False.</p>
+</dd>
+<dt>forecast_criteria_df<span class="classifier">bool, optional</span></dt><dd><p>If True, displays the DataFrame containing criteria values used for selecting features during forecasting. Default is False.</p>
+</dd>
+<dt>lags_df<span class="classifier">bool, optional</span></dt><dd><p>If True, displays the DataFrame representing the lags used for each feature in the model. Default is False.</p>
+</dd>
+<dt>MAFE_train_df<span class="classifier">bool, optional</span></dt><dd><p>If True, displays the MAFE values for the training set. Default is False.</p>
+</dd>
+<dt>head<span class="classifier">int, optional</span></dt><dd><p>Number of rows to display when displaying the results DataFrames. Default is 10.</p>
+</dd>
+</dl>
+</section>
+<section id="id63">
+<h3>Returns<a class="headerlink" href="#id63" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays the specified results based on the provided parameters.</p>
+</dd>
+</dl>
+</section>
+<section id="id64">
+<h3>Notes<a class="headerlink" href="#id64" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>This method allows the user to access different performance metrics and forecast-related data.</p></li>
+<li><p>By selecting the appropriate parameters, users can view specific tables and metrics that summarize the model’s forecasting performance.</p></li>
+<li><p>The <cite>head</cite> parameter controls the number of rows to display for DataFrames to avoid overwhelming output.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend.plot_gtrends">
+<span class="sig-name descname"><span class="pre">plot_gtrends</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">winsorize_trend</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scaled</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend.plot_gtrends"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend.plot_gtrends" title="Link to this definition"></a></dt>
+<dd><section id="id65">
+<h3>Parameters<a class="headerlink" href="#id65" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>exog<span class="classifier">list of str or None, optional</span></dt><dd><p>List of exogenous variables (Google Trends features) to plot. If None, all available features are plotted. Default is None.</p>
+</dd>
+<dt>h<span class="classifier">int, optional</span></dt><dd><p>The forecast horizon for which the trends are plotted. Default is 12.</p>
+</dd>
+<dt>winsorize_trend<span class="classifier">bool, optional</span></dt><dd><p>If True, plots the Google Trends data after winsorization, which reduces the effect of outliers. Default is False.</p>
+</dd>
+<dt>scaled<span class="classifier">bool, optional</span></dt><dd><p>If True, plots the scaled version of Google Trends data, allowing for comparison across different features. Default is False.</p>
+</dd>
+</dl>
+</section>
+<section id="id66">
+<h3>Returns<a class="headerlink" href="#id66" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays the plots for the specified Google Trends features.</p>
+</dd>
+</dl>
+</section>
+<section id="id67">
+<h3>Notes<a class="headerlink" href="#id67" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>This method provides a visual representation of Google Trends data used in the model, which helps in understanding the temporal patterns in the data.</p></li>
+<li><p>Users can optionally plot specific features by providing a list in the <cite>exog</cite> parameter.</p></li>
+<li><p>The <cite>winsorize_trend</cite> parameter allows for a clearer view by minimizing the impact of extreme values.</p></li>
+<li><p>The <cite>scaled</cite> parameter enables visualization of standardized features, useful for comparing different variables on the same scale.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend.plot_hsi">
+<span class="sig-name descname"><span class="pre">plot_hsi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">hsi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend.plot_hsi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend.plot_hsi" title="Link to this definition"></a></dt>
+<dd><p>Plots the Housing Sentiment Index (HSI) data used in the model, allowing for visualization of the extracted features.</p>
+<section id="id68">
+<h3>Parameters<a class="headerlink" href="#id68" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>hsi<span class="classifier">list of str or None, optional</span></dt><dd><p>List of HSI features to plot. If None, all available HSI features are plotted. Default is None.</p>
+</dd>
+</dl>
+</section>
+<section id="id69">
+<h3>Returns<a class="headerlink" href="#id69" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays the plots for the specified HSI features.</p>
+</dd>
+</dl>
+</section>
+<section id="id70">
+<h3>Notes<a class="headerlink" href="#id70" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>This method provides a visual representation of the HSI features that have been extracted using PCA and other transformations.</p></li>
+<li><p>The <cite>hsi</cite> parameter allows users to specify particular HSI features to visualize, or plot all available features if set to None.</p></li>
+<li><p>Useful for analyzing the derived sentiment features and understanding their temporal patterns.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend.plot_improvement">
+<span class="sig-name descname"><span class="pre">plot_improvement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'MAFE'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">h_list</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">labels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">figsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(15,</span> <span class="pre">9)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend.plot_improvement"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend.plot_improvement" title="Link to this definition"></a></dt>
+<dd><p>Plots the improvement in forecasting accuracy for different horizons, using a specified performance measure.</p>
+<section id="id71">
+<h3>Parameters<a class="headerlink" href="#id71" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>measure<span class="classifier">str, optional</span></dt><dd><p>The performance measure to visualize. Options include ‘MAFE’ (Mean Absolute Forecasting Error) and ‘MSFE’ (Mean Squared Forecasting Error). Default is ‘MAFE’.</p>
+</dd>
+<dt>h_list<span class="classifier">list of int or None, optional</span></dt><dd><p>A list of forecast horizons to include in the plot. If None, all available horizons are included. Default is None.</p>
+</dd>
+<dt>colors<span class="classifier">list of str or None, optional</span></dt><dd><p>List of colors to use for the plot lines. If None, default colors are used. Default is None.</p>
+</dd>
+<dt>labels<span class="classifier">list of str or None, optional</span></dt><dd><p>List of labels for each forecast horizon in the plot. If None, default labels are used. Default is None.</p>
+</dd>
+<dt>figsize<span class="classifier">tuple of int, optional</span></dt><dd><p>Figure size for the plot. Default is (15, 9).</p>
+</dd>
+</dl>
+</section>
+<section id="id72">
+<h3>Returns<a class="headerlink" href="#id72" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays a plot showing the improvement in forecasting accuracy for the specified measure and horizons.</p>
+</dd>
+</dl>
+</section>
+<section id="id73">
+<h3>Notes<a class="headerlink" href="#id73" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>This method helps visualize the improvement in forecasting performance for different horizons.</p></li>
+<li><p>The <cite>measure</cite> parameter allows the user to specify whether to visualize Mean Absolute Forecasting Error (MAFE) or Mean Squared Forecasting Error (MSFE).</p></li>
+<li><p>Users can customize the appearance of the plot using the <cite>colors</cite>, <cite>labels</cite>, and <cite>figsize</cite> parameters.</p></li>
+<li><p>The <cite>h_list</cite> parameter allows for selecting specific forecast horizons to analyze, which can be useful for evaluating the model’s performance over varying time periods.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="google_trends_functions.GoogleTrend.plot_forecast">
+<span class="sig-name descname"><span class="pre">plot_forecast</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exog</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/google_trends_functions.html#GoogleTrend.plot_forecast"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#google_trends_functions.GoogleTrend.plot_forecast" title="Link to this definition"></a></dt>
+<dd><p>Plots the forecasted Housing Price Index (HPI) values along with the actual values for comparison.</p>
+<section id="id74">
+<h3>Parameters<a class="headerlink" href="#id74" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>exog<span class="classifier">list of str or None, optional</span></dt><dd><p>List of exogenous variables (features) to include in the forecast plot. If None, all available features are included. Default is None.</p>
+</dd>
+</dl>
+</section>
+<section id="id75">
+<h3>Returns<a class="headerlink" href="#id75" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays the forecast plot showing the predicted HPI values and the actual values.</p>
+</dd>
+</dl>
+</section>
+<section id="id76">
+<h3>Notes<a class="headerlink" href="#id76" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>This method provides a visual comparison between the forecasted HPI values and the actual values, allowing users to assess the model’s predictive performance.</p></li>
+<li><p>The <cite>exog</cite> parameter allows users to include specific exogenous features in the plot for further analysis of their impact on the forecast.</p></li>
+<li><p>Useful for evaluating the quality of the model’s predictions over different time horizons.</p></li>
+</ul>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="forecast_functions.html" class="btn btn-neutral float-left" title="forecast_functions module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mohammad Ebrahimi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

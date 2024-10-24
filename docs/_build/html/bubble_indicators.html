@@ -1,0 +1,757 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>bubble_indicators module &mdash; GTBpy Documentation 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="forecast_functions module" href="forecast_functions.html" />
+    <link rel="prev" title="GTBpy" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            GTBpy Documentation
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">GTBpy</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">bubble_indicators module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#bubble_indicators.PWY_SADF"><code class="docutils literal notranslate"><span class="pre">PWY_SADF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bubble_indicators.PWY_SADF.stats"><code class="docutils literal notranslate"><span class="pre">PWY_SADF.stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bubble_indicators.PWY_SADF.critical_values"><code class="docutils literal notranslate"><span class="pre">PWY_SADF.critical_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bubble_indicators.PWY_SADF.bubbles"><code class="docutils literal notranslate"><span class="pre">PWY_SADF.bubbles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bubble_indicators.PWY_SADF.plot"><code class="docutils literal notranslate"><span class="pre">PWY_SADF.plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#bubble_indicators.PSY_GSADF"><code class="docutils literal notranslate"><span class="pre">PSY_GSADF</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bubble_indicators.PSY_GSADF.stats"><code class="docutils literal notranslate"><span class="pre">PSY_GSADF.stats()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bubble_indicators.PSY_GSADF.critical_values"><code class="docutils literal notranslate"><span class="pre">PSY_GSADF.critical_values()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bubble_indicators.PSY_GSADF.bubbles"><code class="docutils literal notranslate"><span class="pre">PSY_GSADF.bubbles()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#bubble_indicators.PSY_GSADF.plot"><code class="docutils literal notranslate"><span class="pre">PSY_GSADF.plot()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#bubble_indicators.WHL"><code class="docutils literal notranslate"><span class="pre">WHL</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="forecast_functions.html">forecast_functions module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="google_trends_functions.html">google_trends_functions module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">GTBpy Documentation</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">GTBpy</a></li>
+      <li class="breadcrumb-item active">bubble_indicators module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/bubble_indicators.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-bubble_indicators">
+<span id="bubble-indicators-module"></span><h1>bubble_indicators module<a class="headerlink" href="#module-bubble_indicators" title="Link to this heading"></a></h1>
+<p>Bubble tests from the following papers:
+- PWY (SADF test): Phillips, Wu and Yu (2011)
+- PSY (GSADF test): Phillips, Shi and Yu (2015)
+- WHL: Whitehouse, Harvey and Leybourne (2022)</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="bubble_indicators.PWY_SADF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bubble_indicators.</span></span><span class="sig-name descname"><span class="pre">PWY_SADF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swindow0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">njit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#PWY_SADF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.PWY_SADF" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Implements the Supremum Augmented Dickey-Fuller (SADF) test, based on Phillips, Wu, and Yu (2011),
+to detect and date-stamp speculative bubbles in time series data.</p>
+<p>The PWY SADF test is an extension of the ADF test, where recursive right-tailed ADF tests are performed 
+on expanding subsamples of the data. The test identifies periods when the test statistic exceeds a critical 
+value, which can be interpreted as evidence of bubble-like behavior.</p>
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>y<span class="classifier">pandas.Series, optional</span></dt><dd><p>Time series data on which the SADF test will be performed.</p>
+</dd>
+<dt>swindow0<span class="classifier">int, optional</span></dt><dd><p>Minimum window size for the recursive ADF tests. If not provided, it defaults to 
+<cite>int(T * (0.01 + 1.8 / np.sqrt(T)))</cite>, where <cite>T</cite> is the length of <cite>y</cite>.</p>
+</dd>
+<dt>adflag<span class="classifier">int, default=1</span></dt><dd><p>The lag length for the ADF test.</p>
+</dd>
+<dt>regression<span class="classifier">{‘c’, ‘ct’, ‘n’}, default=’c’</span></dt><dd><p>Type of deterministic term included in the ADF test:
+- ‘c’ : constant.
+- ‘ct’: constant and trend.
+- ‘n’ : no deterministic terms.</p>
+</dd>
+<dt>njit<span class="classifier">bool, default=False</span></dt><dd><p>If True, uses a Numba-optimized version of the ADF test to speed up computation.</p>
+</dd>
+</dl>
+</section>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>y<span class="classifier">pandas.Series</span></dt><dd><p>The input time series data.</p>
+</dd>
+<dt>T<span class="classifier">int</span></dt><dd><p>Length of the input time series.</p>
+</dd>
+<dt>swindow0<span class="classifier">int</span></dt><dd><p>The minimum window size used in recursive ADF tests.</p>
+</dd>
+<dt>adflag<span class="classifier">int</span></dt><dd><p>The number of lags used in the ADF test.</p>
+</dd>
+<dt>regression<span class="classifier">str</span></dt><dd><p>Type of regression term used in the ADF test (‘c’, ‘ct’, or ‘n’).</p>
+</dd>
+<dt>ADF<span class="classifier">callable</span></dt><dd><p>The function used to compute the ADF statistic. Either <cite>ADF_FL</cite> or <cite>ADF_FL_njit</cite> depending 
+on the <cite>njit</cite> parameter.</p>
+</dd>
+<dt>sadf<span class="classifier">float</span></dt><dd><p>The supremum ADF statistic computed from the recursive ADF tests.</p>
+</dd>
+<dt>badfs<span class="classifier">pandas.Series</span></dt><dd><p>The ADF statistics computed for each subsample, indexed by time.</p>
+</dd>
+<dt>cv_sadf<span class="classifier">numpy.ndarray</span></dt><dd><p>Critical values for the SADF statistic at specified quantiles.</p>
+</dd>
+<dt>cv_badfs<span class="classifier">pandas.DataFrame</span></dt><dd><p>Critical values for the badfs statistics at specified quantiles.</p>
+</dd>
+<dt>bubbles_df<span class="classifier">pandas.DataFrame</span></dt><dd><p>Identified bubble periods, with start and end dates for each bubble.</p>
+</dd>
+<dt>test_qe<span class="classifier">float</span></dt><dd><p>Quantile used to test for bubbles in the <cite>bubbles</cite> method.</p>
+</dd>
+</dl>
+</section>
+<section id="methods">
+<h2>Methods<a class="headerlink" href="#methods" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>stats()</dt><dd><p>Computes the SADF statistic and the ADF statistics for each subsample.</p>
+</dd>
+<dt>critical_values(T=None, cv_qes=[0.9, 0.95, 0.99], m=2000, seed=1)</dt><dd><p>Simulates critical values for the SADF and badfs statistics based on Monte Carlo simulations.</p>
+</dd>
+<dt>bubbles(test_qe)</dt><dd><p>Identifies bubble periods where the SADF statistic exceeds the critical values for the given quantile.</p>
+</dd>
+<dt>plot()</dt><dd><p>Plots the time series, SADF statistics, critical values, and highlights bubble periods.</p>
+</dd>
+</dl>
+</section>
+<section id="references">
+<h2>References<a class="headerlink" href="#references" title="Link to this heading"></a></h2>
+<p>Phillips, P. C., Wu, Y., &amp; Yu, J. (2011). Explosive behavior in the 1990s NASDAQ: When did exuberance escalate asset values?.
+International Economic Review, 52(1), 201-226.</p>
+</section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span> <span class="o">=</span> <span class="n">PWY_SADF</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">price_series</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sadf_stat</span><span class="p">,</span> <span class="n">badfs_stats</span> <span class="o">=</span> <span class="n">pw_sadf</span><span class="o">.</span><span class="n">stats</span><span class="p">()</span>  <span class="c1"># Compute the SADF statistics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv_sadf</span><span class="p">,</span> <span class="n">cv_badfs</span> <span class="o">=</span> <span class="n">pw_sadf</span><span class="o">.</span><span class="n">critical_values</span><span class="p">(</span><span class="n">cv_qes</span><span class="o">=</span><span class="p">[</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">],</span> <span class="n">m</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># Simulate critical values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bubbles_df</span> <span class="o">=</span> <span class="n">pw_sadf</span><span class="o">.</span><span class="n">bubbles</span><span class="p">(</span><span class="n">test_qe</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>  <span class="c1"># Identify bubble periods</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>  <span class="c1"># Plot the results</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="bubble_indicators.PWY_SADF.stats">
+<span class="sig-name descname"><span class="pre">stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#PWY_SADF.stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.PWY_SADF.stats" title="Link to this definition"></a></dt>
+<dd><p>Calculates the Supremum Augmented Dickey-Fuller (SADF) test statistic over expanding windows.</p>
+<p>This method performs a recursive ADF test using expanding sample windows starting from the 
+initial window size <cite>swindow0</cite> up to the total length of the time series <cite>T</cite>. For each window, 
+the ADF statistic is computed, and the SADF statistic is determined as the maximum value across 
+all ADF statistics.</p>
+<section id="returns">
+<h3>Returns<a class="headerlink" href="#returns" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>sadf<span class="classifier">float</span></dt><dd><p>The supremum ADF (SADF) statistic, which is the maximum of the ADF statistics over all expanding windows.</p>
+</dd>
+<dt>badfs<span class="classifier">pd.Series</span></dt><dd><p>A Pandas Series containing the ADF statistics for each window size from <cite>swindow0</cite> to <cite>T</cite>. 
+The index of the Series corresponds to the time index of the input series <cite>y</cite>.</p>
+</dd>
+</dl>
+</section>
+<section id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The ADF statistic is calculated using the specified <cite>adflag</cite> (number of lags) and <cite>regression</cite>
+(constant or constant with trend).</p></li>
+<li><p>The SADF test is a recursive right-tailed unit root test, commonly used for bubble detection in
+time series data.</p></li>
+<li><p>The <cite>badfs</cite> series represents the sequence of ADF test statistics for each expanding window,
+where the length of the window increases from <cite>swindow0</cite> to <cite>T</cite>.</p></li>
+</ul>
+</section>
+<section id="id1">
+<h3>Examples<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span> <span class="o">=</span> <span class="n">PWY_SADF</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">price_series</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sadf_stat</span><span class="p">,</span> <span class="n">adf_stats</span> <span class="o">=</span> <span class="n">pw_sadf</span><span class="o">.</span><span class="n">stats</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sadf_stat</span><span class="p">)</span>
+<span class="go">2.345  # Example output for the maximum ADF statistic</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">adf_stats</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="go">2000-01-31    NaN</span>
+<span class="go">2000-02-29    NaN</span>
+<span class="go">2000-03-31    NaN</span>
+<span class="go">2000-04-30    NaN</span>
+<span class="go">2000-05-31   -1.23</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bubble_indicators.PWY_SADF.critical_values">
+<span class="sig-name descname"><span class="pre">critical_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv_qes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.9,</span> <span class="pre">0.95,</span> <span class="pre">0.99]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#PWY_SADF.critical_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.PWY_SADF.critical_values" title="Link to this definition"></a></dt>
+<dd><p>Computes the critical values for the Supremum Augmented Dickey-Fuller (SADF) test.</p>
+<p>This method simulates random walks under the null hypothesis of a unit root and calculates the 
+SADF statistics for each simulation. Based on these simulations, it derives the critical values 
+for the SADF test at specified quantiles. It also provides the corresponding critical value 
+series for each window in the expanding sequence.</p>
+<section id="id2">
+<h3>Parameters<a class="headerlink" href="#id2" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>T<span class="classifier">int, optional</span></dt><dd><p>The sample size used in the simulation. If not provided, the sample size of the observed time 
+series <cite>y</cite> is used. Defaults to <cite>None</cite>.</p>
+</dd>
+<dt>cv_qes<span class="classifier">list of float, optional</span></dt><dd><p>Quantiles for which the critical values should be calculated. These quantiles represent the 
+desired significance levels. The default values are [0.9, 0.95, 0.99], corresponding to the 
+10%, 5%, and 1% significance levels, respectively.</p>
+</dd>
+<dt>m<span class="classifier">int, optional</span></dt><dd><p>The number of Monte Carlo simulations used to generate the critical values. Defaults to 2000.</p>
+</dd>
+<dt>seed<span class="classifier">int, optional</span></dt><dd><p>Random seed used to ensure reproducibility of the simulations. Defaults to 1.</p>
+</dd>
+</dl>
+</section>
+<section id="id3">
+<h3>Returns<a class="headerlink" href="#id3" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>cv_sadf<span class="classifier">np.ndarray</span></dt><dd><p>An array containing the SADF critical values at the specified quantiles (e.g., 90th, 95th, and 99th percentiles).</p>
+</dd>
+<dt>cv_badfs<span class="classifier">pd.DataFrame</span></dt><dd><p>A DataFrame where each column corresponds to the critical value series for a specific quantile, 
+indexed by the time series index of <cite>y</cite> (if <cite>T == len(y)</cite>). Each column contains the critical 
+values for the SADF test at the respective quantile for each window size.</p>
+</dd>
+</dl>
+</section>
+<section id="id4">
+<h3>Notes<a class="headerlink" href="#id4" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The method generates <cite>m</cite> random walk series and computes the SADF statistics for each of them.</p></li>
+<li><p>The critical values are derived by taking the quantiles of the SADF statistics across the
+simulations.</p></li>
+<li><p>The <cite>cv_badfs</cite> DataFrame provides the critical values at each window size, which can be used
+to compare with the actual SADF statistics obtained from the observed data.</p></li>
+</ul>
+</section>
+<section id="id5">
+<h3>Examples<a class="headerlink" href="#id5" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span> <span class="o">=</span> <span class="n">PWY_SADF</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">price_series</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sadf_cv</span><span class="p">,</span> <span class="n">adf_cv_series</span> <span class="o">=</span> <span class="n">pw_sadf</span><span class="o">.</span><span class="n">critical_values</span><span class="p">(</span><span class="n">cv_qes</span><span class="o">=</span><span class="p">[</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">],</span> <span class="n">m</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sadf_cv</span><span class="p">)</span>
+<span class="go">[1.750, 2.100]  # Example critical values at 95% and 99% levels</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">adf_cv_series</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="go">            0.95   0.99</span>
+<span class="go">2000-01-31    NaN    NaN</span>
+<span class="go">2000-02-29    NaN    NaN</span>
+<span class="go">2000-03-31    NaN    NaN</span>
+<span class="go">2000-04-30    NaN    NaN</span>
+<span class="go">2000-05-31   1.23   1.75</span>
+<span class="go">dtype: float64</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bubble_indicators.PWY_SADF.bubbles">
+<span class="sig-name descname"><span class="pre">bubbles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_qe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#PWY_SADF.bubbles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.PWY_SADF.bubbles" title="Link to this definition"></a></dt>
+<dd><p>Identifies periods of explosive behavior (bubbles) based on the Supremum Augmented Dickey-Fuller (SADF) test results.</p>
+<p>This method compares the SADF statistics (badfs) with the critical value series at a specified quantile 
+and identifies time periods where the SADF statistic exceeds the critical value. These periods are 
+considered as potential bubbles.</p>
+<section id="id6">
+<h3>Parameters<a class="headerlink" href="#id6" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>test_qe<span class="classifier">float</span></dt><dd><p>The quantile used to select the critical value series for comparison. This quantile should be one of the 
+values used in the <cite>critical_values</cite> method (e.g., 0.9, 0.95, 0.99) to determine the significance level.</p>
+</dd>
+</dl>
+</section>
+<section id="id7">
+<h3>Returns<a class="headerlink" href="#id7" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>bubbles_df<span class="classifier">pd.DataFrame</span></dt><dd><p>A DataFrame containing the start and end dates of the identified bubbles. Each row represents a separate 
+bubble episode, and the DataFrame has two columns:
+- ‘Start Date’: The date when the bubble period begins (when the SADF statistic first exceeds the critical value).
+- ‘End Date’: The date when the bubble period ends (when the SADF statistic falls back below the critical value).</p>
+</dd>
+</dl>
+</section>
+<section id="id8">
+<h3>Notes<a class="headerlink" href="#id8" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>The method relies on the comparison of the SADF statistic (<cite>badfs</cite>) and the critical value series at the specified quantile.</p></li>
+<li><p>Consecutive periods where the SADF statistic exceeds the critical value are considered part of the same bubble.</p></li>
+<li><p>The identified bubble periods are returned as a DataFrame, which can be useful for further analysis or visualization.</p></li>
+</ul>
+</section>
+<section id="id9">
+<h3>Examples<a class="headerlink" href="#id9" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span> <span class="o">=</span> <span class="n">PWY_SADF</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">price_series</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span><span class="o">.</span><span class="n">stats</span><span class="p">()</span>  <span class="c1"># Compute the SADF statistics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span><span class="o">.</span><span class="n">critical_values</span><span class="p">(</span><span class="n">cv_qes</span><span class="o">=</span><span class="p">[</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">],</span> <span class="n">m</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># Compute critical values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bubbles_df</span> <span class="o">=</span> <span class="n">pw_sadf</span><span class="o">.</span><span class="n">bubbles</span><span class="p">(</span><span class="n">test_qe</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>  <span class="c1"># Identify bubble periods using the 95% critical value</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">bubbles_df</span><span class="p">)</span>
+<span class="go">            Start Date   End Date</span>
+<span class="go">bubble_1    2002-03-31  2002-07-31</span>
+<span class="go">bubble_2    2004-05-31  2004-09-30</span>
+<span class="go">bubble_3    2007-01-31  2007-04-30</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bubble_indicators.PWY_SADF.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#PWY_SADF.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.PWY_SADF.plot" title="Link to this definition"></a></dt>
+<dd><p>Plots the time series of the input data along with the SADF statistics and critical values, highlighting identified bubble periods.</p>
+<p>This method generates two subplots:
+- The first plot shows the time series of the input data (<cite>y</cite>).
+- The second plot shows the SADF statistics (<cite>badfs</cite>) and the corresponding critical values. 
+Periods identified as bubbles are shaded in both plots.</p>
+<p>The method visually displays the relationship between the SADF statistics and critical values to help 
+interpret when and where bubble periods occur.</p>
+<section id="id10">
+<h3>Returns<a class="headerlink" href="#id10" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>The method generates a plot but does not return any objects.</p>
+</dd>
+</dl>
+</section>
+<section id="id11">
+<h3>Notes<a class="headerlink" href="#id11" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p>Bubble periods are shaded in gray on both the input data and SADF statistic plots.</p></li>
+<li><p>Critical values are shown in red, and the SADF statistic is shown in blue.</p></li>
+<li><p>The method assumes that the <cite>bubbles</cite> method has already been called to identify bubble periods
+and populate the <cite>bubbles_df</cite> attribute.</p></li>
+</ul>
+</section>
+<section id="id12">
+<h3>Examples<a class="headerlink" href="#id12" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span> <span class="o">=</span> <span class="n">PWY_SADF</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">price_series</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span><span class="o">.</span><span class="n">stats</span><span class="p">()</span>  <span class="c1"># Compute the SADF statistics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span><span class="o">.</span><span class="n">critical_values</span><span class="p">(</span><span class="n">cv_qes</span><span class="o">=</span><span class="p">[</span><span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">],</span> <span class="n">m</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">)</span>  <span class="c1"># Compute critical values</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span><span class="o">.</span><span class="n">bubbles</span><span class="p">(</span><span class="n">test_qe</span><span class="o">=</span><span class="mf">0.95</span><span class="p">)</span>  <span class="c1"># Identify bubble periods</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pw_sadf</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>  <span class="c1"># Plot the data, SADF statistics, and bubble periods</span>
+</pre></div>
+</div>
+<p>The resulting plot will show:
+- The price series in green (first subplot).
+- The SADF statistics in blue and critical values in red (second subplot).
+- Gray-shaded areas indicating identified bubble periods on both subplots.</p>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bubble_indicators.PSY_GSADF">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bubble_indicators.</span></span><span class="sig-name descname"><span class="pre">PSY_GSADF</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">swindow0</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">adflag</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">regression</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'c'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">njit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#PSY_GSADF"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.PSY_GSADF" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Implements the Generalized Supremum Augmented Dickey-Fuller (GSADF) test, based on Phillips, Shi, 
+and Yu (2015), to detect and date-stamp multiple speculative bubbles in a time series.</p>
+<p>The GSADF test extends the SADF test by allowing both the start and end points of the sample 
+window to vary, making it more robust in detecting multiple periods of explosive behavior. This 
+test is widely used for identifying bubbles in financial and economic time series.</p>
+<section id="id13">
+<h2>Parameters<a class="headerlink" href="#id13" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>y<span class="classifier">pandas.Series, optional</span></dt><dd><p>The time series data on which the GSADF test will be performed.</p>
+</dd>
+<dt>swindow0<span class="classifier">int, optional</span></dt><dd><p>The minimum window size for the backward SADF (BSADF) calculations. If not provided, it defaults 
+to <cite>int(T * (0.01 + 1.8 / np.sqrt(T)))</cite>, where <cite>T</cite> is the length of the time series.</p>
+</dd>
+<dt>adflag<span class="classifier">int, default=1</span></dt><dd><p>The number of lags used in the ADF test.</p>
+</dd>
+<dt>regression<span class="classifier">{‘c’, ‘ct’, ‘n’}, default=’c’</span></dt><dd><p>The type of deterministic term used in the ADF test:
+- ‘c’ : constant.
+- ‘ct’: constant and trend.
+- ‘n’ : no deterministic terms.</p>
+</dd>
+<dt>njit<span class="classifier">bool, default=False</span></dt><dd><p>If True, the method uses a Numba-optimized version of the ADF test to improve computational efficiency.</p>
+</dd>
+</dl>
+</section>
+<section id="id14">
+<h2>Attributes<a class="headerlink" href="#id14" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>y<span class="classifier">pandas.Series</span></dt><dd><p>The input time series data.</p>
+</dd>
+<dt>T<span class="classifier">int</span></dt><dd><p>The length of the input time series.</p>
+</dd>
+<dt>swindow0<span class="classifier">int</span></dt><dd><p>The minimum window size used for backward SADF calculations.</p>
+</dd>
+<dt>adflag<span class="classifier">int</span></dt><dd><p>The number of lags used in the ADF test.</p>
+</dd>
+<dt>regression<span class="classifier">str</span></dt><dd><p>The type of deterministic term used in the ADF test (‘c’, ‘ct’, or ‘n’).</p>
+</dd>
+<dt>ADF<span class="classifier">callable</span></dt><dd><p>The function used to compute the ADF statistic, either <cite>ADF_FL</cite> or <cite>ADF_FL_njit</cite> depending on the <cite>njit</cite> parameter.</p>
+</dd>
+<dt>gsadf<span class="classifier">float</span></dt><dd><p>The Generalized Supremum ADF (GSADF) statistic, representing the maximum BSADF statistic across all windows.</p>
+</dd>
+<dt>bsadfs<span class="classifier">pandas.Series</span></dt><dd><p>A series of BSADF statistics, indexed by the time series’ index.</p>
+</dd>
+<dt>cv_gsadf<span class="classifier">numpy.ndarray</span></dt><dd><p>Critical values for the GSADF statistic at specified quantiles.</p>
+</dd>
+<dt>cv_bsadfs<span class="classifier">pandas.DataFrame</span></dt><dd><p>Critical values for the BSADF statistics over time at specified quantiles.</p>
+</dd>
+<dt>bubbles_df<span class="classifier">pandas.DataFrame</span></dt><dd><p>Detected bubble periods with their start and end dates.</p>
+</dd>
+<dt>test_qe<span class="classifier">float</span></dt><dd><p>The quantile used to test for bubbles in the <cite>bubbles()</cite> method.</p>
+</dd>
+</dl>
+</section>
+<section id="id15">
+<h2>Methods<a class="headerlink" href="#id15" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>stats()</dt><dd><p>Computes the GSADF statistic and the BSADF statistics for varying windows.</p>
+</dd>
+<dt>critical_values(T=None, bsadfs=None, cv_qes=[0.9, 0.95, 0.99], m=2000, seed=1)</dt><dd><p>Computes the critical values for the GSADF and BSADF statistics using Monte Carlo simulations.</p>
+</dd>
+<dt>bubbles(test_qe)</dt><dd><p>Identifies bubble periods by comparing the BSADF statistics to the critical values at a given quantile.</p>
+</dd>
+<dt>plot()</dt><dd><p>Plots the time series, BSADF statistics, and critical values, highlighting bubble periods.</p>
+</dd>
+</dl>
+</section>
+<section id="id16">
+<h2>References<a class="headerlink" href="#id16" title="Link to this heading"></a></h2>
+<p>Phillips, P. C., Shi, S., &amp; Yu, J. (2015). Testing for multiple bubbles: Historical episodes of exuberance and 
+collapse in the S&amp;P 500. <em>International Economic Review</em>, 56(4), 1043-1078.</p>
+</section>
+<section id="id17">
+<h2>Examples<a class="headerlink" href="#id17" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_test</span> <span class="o">=</span> <span class="n">PSY_GSADF</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">price_series</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_stat</span><span class="p">,</span> <span class="n">bsadfs_stats</span> <span class="o">=</span> <span class="n">gsadf_test</span><span class="o">.</span><span class="n">stats</span><span class="p">()</span>  <span class="c1"># Compute GSADF and BSADF statistics</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv_gsadf</span><span class="p">,</span> <span class="n">cv_bsadfs</span> <span class="o">=</span> <span class="n">gsadf_test</span><span class="o">.</span><span class="n">critical_values</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">cv_qes</span><span class="o">=</span><span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bubbles_df</span> <span class="o">=</span> <span class="n">gsadf_test</span><span class="o">.</span><span class="n">bubbles</span><span class="p">(</span><span class="n">test_qe</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>  <span class="c1"># Detect bubble periods</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_test</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>  <span class="c1"># Visualize the results</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="bubble_indicators.PSY_GSADF.stats">
+<span class="sig-name descname"><span class="pre">stats</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#PSY_GSADF.stats"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.PSY_GSADF.stats" title="Link to this definition"></a></dt>
+<dd><p>Computes the Generalized Supremum Augmented Dickey-Fuller (GSADF) statistic and the backward SADF 
+statistics for expanding windows of the time series.</p>
+<p>The GSADF test is an extension of the SADF test, where both the start and end points of the estimation 
+window vary, making the test more robust in detecting multiple bubbles. This method computes the GSADF 
+statistic, which is the maximum backward SADF statistic over the sample.</p>
+<section id="id18">
+<h3>Returns<a class="headerlink" href="#id18" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>gsadf<span class="classifier">float</span></dt><dd><p>The Generalized Supremum ADF (GSADF) statistic, which is the maximum backward SADF statistic over 
+the expanding sample.</p>
+</dd>
+<dt>bsadfs<span class="classifier">pandas.Series</span></dt><dd><p>A time series of backward SADF (BSADF) statistics, calculated for each window endpoint.</p>
+</dd>
+</dl>
+</section>
+<section id="id19">
+<h3>Notes<a class="headerlink" href="#id19" title="Link to this heading"></a></h3>
+<p>The GSADF test is useful in identifying speculative bubbles by testing for explosive behavior in multiple 
+periods, making it more sensitive to detecting both the origination and collapse of bubbles.</p>
+</section>
+<section id="id20">
+<h3>References<a class="headerlink" href="#id20" title="Link to this heading"></a></h3>
+<p>Phillips, P. C., Shi, S., &amp; Yu, J. (2015). Testing for multiple bubbles: Historical episodes of exuberance and collapse 
+in the S&amp;P 500. <em>International Economic Review</em>, 56(4), 1043-1078.</p>
+</section>
+<section id="id21">
+<h3>Examples<a class="headerlink" href="#id21" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_test</span> <span class="o">=</span> <span class="n">PSY_GSADF</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">price_series</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_stat</span><span class="p">,</span> <span class="n">bsadfs_stats</span> <span class="o">=</span> <span class="n">gsadf_test</span><span class="o">.</span><span class="n">stats</span><span class="p">()</span>  <span class="c1"># Compute the GSADF and BSADF statistics</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bubble_indicators.PSY_GSADF.critical_values">
+<span class="sig-name descname"><span class="pre">critical_values</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">T</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bsadfs</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cv_qes</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[0.9,</span> <span class="pre">0.95,</span> <span class="pre">0.99]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#PSY_GSADF.critical_values"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.PSY_GSADF.critical_values" title="Link to this definition"></a></dt>
+<dd><p>Computes the critical values for the Generalized Supremum Augmented Dickey-Fuller (GSADF) test 
+based on Monte Carlo simulations.</p>
+<section id="id22">
+<h3>Parameters<a class="headerlink" href="#id22" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>T<span class="classifier">int, optional</span></dt><dd><p>Length of the time series. If not provided, the length of the series (<cite>self.T</cite>) is used.</p>
+</dd>
+<dt>bsadfs<span class="classifier">numpy.ndarray, optional</span></dt><dd><p>Precomputed matrix of backward SADF (BSADF) statistics from previous simulations, 
+allowing continuation of simulations. If None, a new matrix is initialized.</p>
+</dd>
+<dt>cv_qes<span class="classifier">list of float, optional</span></dt><dd><p>Quantiles for which critical values are computed, by default [0.9, 0.95, 0.99].</p>
+</dd>
+<dt>m<span class="classifier">int, optional</span></dt><dd><p>Number of Monte Carlo simulations to run for generating the critical values, by default 2000.</p>
+</dd>
+<dt>seed<span class="classifier">int, optional</span></dt><dd><p>Seed for the random number generator used in Monte Carlo simulations, by default 1.</p>
+</dd>
+</dl>
+</section>
+<section id="id23">
+<h3>Returns<a class="headerlink" href="#id23" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>cv_gsadf<span class="classifier">numpy.ndarray</span></dt><dd><p>Critical values for the GSADF test at the specified quantiles.</p>
+</dd>
+<dt>cv_bsadfs<span class="classifier">pandas.DataFrame</span></dt><dd><p>Critical values for the BSADF statistics over time at the specified quantiles.</p>
+</dd>
+</dl>
+</section>
+<section id="id24">
+<h3>Notes<a class="headerlink" href="#id24" title="Link to this heading"></a></h3>
+<p>The critical values are obtained by simulating a random walk process and computing the GSADF 
+and BSADF statistics for each simulation. These statistics are then used to calculate the 
+empirical quantiles, which serve as the critical values.</p>
+<p>The random walk is generated as a cumulative sum of standard normal shocks, adjusted with a 
+small drift term (<cite>a = T**(-1)</cite>), where <cite>T</cite> is the length of the time series.</p>
+</section>
+<section id="id25">
+<h3>Examples<a class="headerlink" href="#id25" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_test</span> <span class="o">=</span> <span class="n">PSY_GSADF</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">price_series</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cv_gsadf</span><span class="p">,</span> <span class="n">cv_bsadfs</span> <span class="o">=</span> <span class="n">gsadf_test</span><span class="o">.</span><span class="n">critical_values</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">cv_qes</span><span class="o">=</span><span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bubble_indicators.PSY_GSADF.bubbles">
+<span class="sig-name descname"><span class="pre">bubbles</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">test_qe</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#PSY_GSADF.bubbles"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.PSY_GSADF.bubbles" title="Link to this definition"></a></dt>
+<dd><p>Identifies and returns periods of explosive behavior (bubbles) in the time series 
+based on the GSADF test statistic and its critical values.</p>
+<section id="id26">
+<h3>Parameters<a class="headerlink" href="#id26" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>test_qe<span class="classifier">float</span></dt><dd><p>The quantile level (e.g., 0.95 or 0.99) of the critical value to use for bubble identification. 
+It must match one of the quantiles used in <cite>critical_values()</cite>.</p>
+</dd>
+</dl>
+</section>
+<section id="id27">
+<h3>Returns<a class="headerlink" href="#id27" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>bubbles_df<span class="classifier">pandas.DataFrame</span></dt><dd><p>DataFrame containing the start and end dates of detected bubble periods.
+The index is labeled as ‘bubble_1’, ‘bubble_2’, etc., for each identified bubble.
+The columns are:
+- ‘Start Date’: The start date of the bubble.
+- ‘End Date’: The end date of the bubble.</p>
+</dd>
+</dl>
+</section>
+<section id="id28">
+<h3>Notes<a class="headerlink" href="#id28" title="Link to this heading"></a></h3>
+<p>A bubble is detected when the BSADF statistic exceeds the critical value corresponding 
+to the specified quantile level (<cite>test_qe</cite>). The method identifies periods during which 
+the time series shows signs of explosive growth.</p>
+<p>The method applies a rolling window approach where at each time step the BSADF statistic 
+is compared to the critical value. If the statistic is greater than the critical value, 
+it indicates a bubble, and the corresponding time period is recorded.</p>
+</section>
+<section id="id29">
+<h3>Examples<a class="headerlink" href="#id29" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_test</span> <span class="o">=</span> <span class="n">PSY_GSADF</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">price_series</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_test</span><span class="o">.</span><span class="n">critical_values</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">cv_qes</span><span class="o">=</span><span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">bubbles_df</span> <span class="o">=</span> <span class="n">gsadf_test</span><span class="o">.</span><span class="n">bubbles</span><span class="p">(</span><span class="n">test_qe</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">bubbles_df</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="bubble_indicators.PSY_GSADF.plot">
+<span class="sig-name descname"><span class="pre">plot</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#PSY_GSADF.plot"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.PSY_GSADF.plot" title="Link to this definition"></a></dt>
+<dd><p>Plots the time series and the corresponding BSADF test statistics along with the critical values,
+highlighting the periods of explosive behavior (bubbles).</p>
+<section id="id30">
+<h3>Parameters<a class="headerlink" href="#id30" title="Link to this heading"></a></h3>
+<p>None</p>
+</section>
+<section id="id31">
+<h3>Returns<a class="headerlink" href="#id31" title="Link to this heading"></a></h3>
+<dl class="simple">
+<dt>None</dt><dd><p>Displays a plot with two subplots:
+- The upper subplot shows the original time series (<cite>y</cite>).
+- The lower subplot shows the BSADF test statistics and the corresponding critical values 
+for a given quantile level (<cite>test_qe</cite>).
+Detected bubble periods are shaded in both plots.</p>
+</dd>
+</dl>
+</section>
+<section id="id32">
+<h3>Notes<a class="headerlink" href="#id32" title="Link to this heading"></a></h3>
+<p>The method visualizes the results of the GSADF test by plotting the following:
+1. The original time series (<cite>y</cite>) in the upper plot.
+2. The BSADF statistics in the lower plot, where they are compared against the critical values 
+(computed in the <cite>critical_values()</cite> method) at the specified quantile level (<cite>test_qe</cite>).
+3. Periods identified as bubbles (from the <cite>bubbles()</cite> method) are shaded in both plots 
+for easy identification.</p>
+</section>
+<section id="id33">
+<h3>Examples<a class="headerlink" href="#id33" title="Link to this heading"></a></h3>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_test</span> <span class="o">=</span> <span class="n">PSY_GSADF</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="n">price_series</span><span class="p">,</span> <span class="n">swindow0</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">adflag</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">regression</span><span class="o">=</span><span class="s1">&#39;c&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_test</span><span class="o">.</span><span class="n">critical_values</span><span class="p">(</span><span class="n">m</span><span class="o">=</span><span class="mi">5000</span><span class="p">,</span> <span class="n">cv_qes</span><span class="o">=</span><span class="p">[</span><span class="mf">0.9</span><span class="p">,</span> <span class="mf">0.95</span><span class="p">,</span> <span class="mf">0.99</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_test</span><span class="o">.</span><span class="n">bubbles</span><span class="p">(</span><span class="n">test_qe</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">gsadf_test</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="bubble_indicators.WHL">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">bubble_indicators.</span></span><span class="sig-name descname"><span class="pre">WHL</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">k</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">m</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">T_star</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">80</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/bubble_indicators.html#WHL"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#bubble_indicators.WHL" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Implements the Whitehouse, Harvey, and Leybourne (2022) test for detecting and analyzing 
+speculative bubbles and crashes in time series data.</p>
+<p>This class calculates two key statistics: 
+- <strong>A-statistic</strong>: Used to detect the presence of bubbles (explosive behavior).
+- <strong>S-statistic</strong>: Used to identify crashes (sharp declines) following bubbles.</p>
+<section id="id34">
+<h2>Parameters<a class="headerlink" href="#id34" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>y<span class="classifier">pandas.Series</span></dt><dd><p>The time series data to be analyzed for bubbles and crashes.</p>
+</dd>
+<dt>k<span class="classifier">int, optional, default=10</span></dt><dd><p>The number of lags used in calculating the A-statistic.</p>
+</dd>
+<dt>m<span class="classifier">int, optional, default=10</span></dt><dd><p>The window size used for the first segment in calculating the S-statistic.</p>
+</dd>
+<dt>n<span class="classifier">int, optional, default=2</span></dt><dd><p>The window size used for the second segment in calculating the S-statistic.</p>
+</dd>
+<dt>T_star<span class="classifier">int, optional, default=80</span></dt><dd><p>The threshold time index used to determine the critical values for both A and S statistics.</p>
+</dd>
+</dl>
+</section>
+<section id="id35">
+<h2>Attributes<a class="headerlink" href="#id35" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>critical_values<span class="classifier">dict</span></dt><dd><p>Contains the critical values for the A and S statistics:
+- ‘A_critical_value’: Critical value for detecting bubbles using the A-statistic.
+- ‘S_critical_value’: Critical value for detecting crashes using the S-statistic.</p>
+</dd>
+<dt>bubbles<span class="classifier">pandas.DataFrame</span></dt><dd><p>DataFrame listing the origin and collapse dates of detected bubbles. Columns:
+- ‘Origin’: Start date of the bubble.
+- ‘Collapse’: End date of the bubble or ‘On going’ if no crash is detected.</p>
+</dd>
+<dt>stats<span class="classifier">pandas.DataFrame</span></dt><dd><p>DataFrame containing the computed A and S statistics along with the original time series data.</p>
+</dd>
+<dt>T_star<span class="classifier">int</span></dt><dd><p>Threshold time index used to determine the critical values.</p>
+</dd>
+</dl>
+</section>
+<section id="id36">
+<h2>Methods<a class="headerlink" href="#id36" title="Link to this heading"></a></h2>
+<dl class="simple">
+<dt>plot()</dt><dd><p>Plots the original time series, A-statistic, S-statistic, and highlights detected bubbles and crashes.</p>
+</dd>
+</dl>
+</section>
+<section id="id37">
+<h2>Notes<a class="headerlink" href="#id37" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>The A-statistic is designed to detect periods of explosive growth, indicative of bubbles. 
+A bubble is flagged when the A-statistic exceeds its critical value.</p></li>
+<li><p>The S-statistic detects crashes by measuring sharp declines following bubbles. A crash is 
+flagged when the S-statistic falls below its critical value.</p></li>
+<li><p>The method iteratively identifies bubbles and their corresponding crashes, if any, and stores 
+them in the <cite>bubbles</cite> attribute.</p></li>
+</ul>
+</section>
+<section id="id38">
+<h2>References<a class="headerlink" href="#id38" title="Link to this heading"></a></h2>
+<p>Whitehouse, D., Harvey, D. I., &amp; Leybourne, S. J. (2022). Detecting bubbles and crashes in financial markets. 
+<em>Journal of Financial Econometrics</em>.</p>
+</section>
+<section id="id39">
+<h2>Examples<a class="headerlink" href="#id39" title="Link to this heading"></a></h2>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">y</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">([</span><span class="o">...</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">pd</span><span class="o">.</span><span class="n">date_range</span><span class="p">(</span><span class="s1">&#39;2000-01-01&#39;</span><span class="p">,</span> <span class="n">periods</span><span class="o">=</span><span class="mi">100</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">whl_test</span> <span class="o">=</span> <span class="n">WHL</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">m</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">T_star</span><span class="o">=</span><span class="mi">80</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">whl_test</span><span class="o">.</span><span class="n">bubbles</span><span class="p">)</span>  <span class="c1"># View detected bubbles and crashes</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">whl_test</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>  <span class="c1"># Plot the time series, statistics, and detected events</span>
+</pre></div>
+</div>
+</section>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="GTBpy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="forecast_functions.html" class="btn btn-neutral float-right" title="forecast_functions module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Mohammad Ebrahimi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
