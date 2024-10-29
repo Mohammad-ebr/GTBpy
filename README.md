@@ -17,7 +17,7 @@ In addition to the above statistical tools, GTBpy introduces a new predictive in
 
 - [Stig V. Møller, Thomas Pedersen, Erik C. M. Schutte, Allan Timmermann (2023). *Search and Predictability of Prices in the Housing Market*, Management Science 70(1), 415-438.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3805290)
 
-In this documentation, we first demonstrate the auto-regressive model
+In this documentation, we first demonstrate the auto-regressive model that
 GTBpy uses to forecast the target variable. Second, we detail the
 computation of the $BADF$ and $SADF$ statistics proposed by Phillips, Wu, and Yu (2011, PWY hereafter) and $BSADF$ and $GSADF$ test statistics proposed by Phillips,
 Shi, and Yu (2015, PSY hereafter). Third, we describe $A(e,m)$ and
@@ -77,7 +77,7 @@ ${ADF}_{r_{1} = n/T}^{r_{2} = m/T}$ statistic is based on a subset of
 periods ranging from 𝑛 to 𝑚, where 𝑛 and 𝑚 are within the range
 {0,...,𝑇} and 𝑛 is less than 𝑚. The ADF test statistic is defined as:
 
-$${ADF}_{r_{1}}^{r_{2}} = \frac{{\widehat{\beta}}_{r_{1},\ r_{2}}}{\sigma_{{\widehat{\beta}}_{r_{1},\ r_{2}}}}.$$
+$ADF_{r_{1}}^{r_{2}} = \frac{{\widehat{\beta}}_{r_{1},\ r_{2}}}{\sigma_{{\widehat{\beta}}_{r_{1},\ r_{2}}}}.$
 
 The SADF test, introduced by Phillips, Wu, and Yu (2011), is a
 right-tailed unit root test applied recursively over a sequence of
