@@ -991,7 +991,7 @@ def GT_plot(self, df, exog, lag, title=None, winsorize_trend=False, scaled=False
     ax1.legend()
     
     ax3.set_title(exog)
-    escaped_exog = exog.replace('_', '\_').replace(' ', '\ ')
+    escaped_exog = exog.replace('_', r'\_').replace(' ', r'\ ')
     laged_exog = f'${escaped_exog}_{{t-{lag}}}$'
     ax3.set_ylabel(laged_exog)
     # ax3.set_ylabel(f'$\mathregular{{{escaped_exog}_{{t-{lag}}}}}$')

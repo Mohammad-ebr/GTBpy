@@ -22,7 +22,7 @@ setup(
         'matplotlib',
         'seaborn',
         'statsmodels',
-        'sklearn',
+        'scikit-learn',
         'scipy',
         'IPython',
     ]
