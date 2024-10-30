@@ -16,7 +16,6 @@ setup(
     long_description_content_type='text/markdown',
     packages=find_packages(),
     install_requires=[
-        'os',
         'numpy',
         'pandas',
         'numba',
@@ -25,8 +24,6 @@ setup(
         'statsmodels',
         'sklearn',
         'scipy',
-        'math',
-        'ast',
         'IPython',
     ]
 )
