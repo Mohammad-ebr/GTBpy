@@ -6,22 +6,22 @@ The latest documentation can be found at <https://gtbpy.readthedocs.io/en/latest
 
 ## Project Description
 
-**GTBpy** is a toolbox developed for the thesis [*"Predicting Housing Prices in Canada Using News Sentiments, Bubble Indicators, and Google Trends,"* authored by Mohammad Ebrahimi under the supervision of Simon van Norden and Vincent Grégoire (2024, HEC Montréal)](https://hecmontreal.on.worldcat.org/oclc/1458653247). This toolbox provides statistical tests for detecting financial bubbles and comparing forecast performance. Additionally, it introduces a novel predictive index derived from Google Trends data for a target variable.
+**GTBpy** is a toolbox developed for the thesis [*"Predicting Housing Prices in Canada Using News Sentiments, Bubble Indicators, and Google Trends,"*](https://hecmontreal.on.worldcat.org/oclc/1458653247) authored by Mohammad Ebrahimi under the supervision of Simon van Norden and Vincent Grégoire (2024, HEC Montréal). This toolbox provides statistical tests for detecting financial bubbles and comparing forecast performance. Additionally, it introduces a novel predictive index derived from Google Trends data for a target variable.
 
 The financial bubble detection tests implemented in GTBpy are based on the following academic studies:
   
-- PWY (SADF) test: [Peter C.B. Phillips, Yangru Wu, and Jun Yu (2011). *Explosive behavior in the 1990s Nasdaq: when did exuberance escalate stock values?*, International Economic Review, 52, 201-226.](https://onlinelibrary.wiley.com/doi/full/10.1111/j.1468-2354.2010.00625.x?casa_token=b0vMCq3DB-UAAAAA%3ASdak6QzYdiRD0z1hM8JiJoMtPPvKnbIAhp-FcVvJM-SFUxxfZ4cFJQ5epL4l75UafCairsnsVHVL63Tx8g)
-- PSY (GSADF) test: [Peter C.B. Phillips, Shuping Shi, and Jun Yu (2015). *Testing for Multiple Bubbles: Limit Theory of Real Time Detectors*, International Economic Review, 56, 1079-1134.](https://onlinelibrary.wiley.com/doi/full/10.1111/iere.12131)
-- WHL test: [Emily J. Whitehouse, David I. Harvey, and Stephen J. Leybourne (2023). *Real‐Time Monitoring of Bubbles and Crashes*, Oxford Bulletin of Economics and Statistics, Department of Economics, University of Oxford, 85(3), 482-513.](https://onlinelibrary.wiley.com/doi/full/10.1111/obes.12540)
+- PWY (SADF) test: Peter C.B. Phillips, Yangru Wu, and Jun Yu (2011). [*Explosive behavior in the 1990s Nasdaq: when did exuberance escalate stock values?*](https://onlinelibrary.wiley.com/doi/10.1111/j.1468-2354.2010.00625.x), International Economic Review, 52, 201-226.
+- PSY (GSADF) test: Peter C.B. Phillips, Shuping Shi, and Jun Yu (2015). [*Testing for Multiple Bubbles: Limit Theory of Real Time Detectors*](https://onlinelibrary.wiley.com/doi/full/10.1111/iere.12131), International Economic Review, 56, 1079-1134.
+- WHL test: Emily J. Whitehouse, David I. Harvey, and Stephen J. Leybourne (2023). [*Real‐Time Monitoring of Bubbles and Crashes*](https://onlinelibrary.wiley.com/doi/full/10.1111/obes.12540), Oxford Bulletin of Economics and Statistics, Department of Economics, University of Oxford, 85(3), 482-513.
 
 GTBpy also includes statistical tests for comparing the performance of competing forecasts, based on the following papers:
 
-- Equal MAFE/MSFE test: [David I. Harvey, Stephen J. Leybourne, Paul Newbold (1997). *Testing the equality of prediction mean squared errors*, International Journal of Forecasting, 13(2), 281-291.](https://www.sciencedirect.com/science/article/abs/pii/S0169207096007194)
-- Forecast Encompassing test: [David I. Harvey, Stephen J. Leybourne, Paul Newbold (1998). *Tests for Forecast Encompassing*, Journal of Business & Economic Statistics, 16(2) , 254-259](https://www.jstor.org/stable/1392581)
+- Equal MAFE/MSFE test: David I. Harvey, Stephen J. Leybourne, Paul Newbold (1997). [*Testing the equality of prediction mean squared errors*](https://www.sciencedirect.com/science/article/abs/pii/S0169207096007194), International Journal of Forecasting, 13(2), 281-291.
+- Forecast Encompassing test: David I. Harvey, Stephen J. Leybourne, Paul Newbold (1998). [*Tests for Forecast Encompassing*](https://www.jstor.org/stable/1392581), Journal of Business & Economic Statistics, 16(2) , 254-259
 
 In addition to the above statistical tools, GTBpy introduces a new predictive index constructed from Google Trends data for a target variable. This methodology is inspired by the following study:
 
-- [Stig V. Møller, Thomas Pedersen, Erik C. M. Schutte, Allan Timmermann (2023). *Search and Predictability of Prices in the Housing Market*, Management Science 70(1), 415-438.](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3805290)
+- Stig V. Møller, Thomas Pedersen, Erik C. M. Schutte, Allan Timmermann (2023). [*Search and Predictability of Prices in the Housing Market*](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3805290), Management Science 70(1), 415-438.
 
 In this documentation, we first demonstrate the auto-regressive model
 GTBpy uses to forecast the target variable. Second, we detail the
