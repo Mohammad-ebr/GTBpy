@@ -16,7 +16,7 @@ setup(
     long_description_content_type='text/markdown',
     packages=find_packages(),
     install_requires=[
-        'numpy',
+        'numpy<2.1,>=1.22',
         'pandas',
         'numba',
         'matplotlib',
