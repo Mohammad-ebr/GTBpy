@@ -10,18 +10,18 @@ The latest documentation can be found at <https://gtbpy.readthedocs.io/en/latest
 
 The financial bubble detection tests implemented in GTBpy are based on the following academic studies:
   
-- PWY (SADF) test: Peter C.B. Phillips, Yangru Wu, and Jun Yu (2011). [*Explosive behavior in the 1990s Nasdaq: when did exuberance escalate stock values?*](https://onlinelibrary.wiley.com/doi/10.1111/j.1468-2354.2010.00625.x), International Economic Review, 52, 201-226.
-- PSY (GSADF) test: Peter C.B. Phillips, Shuping Shi, and Jun Yu (2015). [*Testing for Multiple Bubbles: Limit Theory of Real Time Detectors*](https://onlinelibrary.wiley.com/doi/full/10.1111/iere.12131), International Economic Review, 56, 1079-1134.
+- **PWY (SADF) test**: Peter C.B. Phillips, Yangru Wu, and Jun Yu (2011). [*Explosive behavior in the 1990s Nasdaq: when did exuberance escalate stock values?*](https://onlinelibrary.wiley.com/doi/10.1111/j.1468-2354.2010.00625.x), International Economic Review, 52, 201-226.
+- **PSY (GSADF) test**: Peter C.B. Phillips, Shuping Shi, and Jun Yu (2015). [*Testing for Multiple Bubbles: Limit Theory of Real Time Detectors*](https://onlinelibrary.wiley.com/doi/full/10.1111/iere.12131), International Economic Review, 56, 1079-1134.
 - WHL test: Emily J. Whitehouse, David I. Harvey, and Stephen J. Leybourne (2023). [*Real‐Time Monitoring of Bubbles and Crashes*](https://onlinelibrary.wiley.com/doi/full/10.1111/obes.12540), Oxford Bulletin of Economics and Statistics, Department of Economics, University of Oxford, 85(3), 482-513.
 
 GTBpy also includes statistical tests for comparing the performance of competing forecasts, based on the following papers:
 
-- Equal MAFE/MSFE test: David I. Harvey, Stephen J. Leybourne, Paul Newbold (1997). [*Testing the equality of prediction mean squared errors*](https://www.sciencedirect.com/science/article/abs/pii/S0169207096007194), International Journal of Forecasting, 13(2), 281-291.
-- Forecast Encompassing test: David I. Harvey, Stephen J. Leybourne, Paul Newbold (1998). [*Tests for Forecast Encompassing*](https://www.jstor.org/stable/1392581), Journal of Business & Economic Statistics, 16(2) , 254-259
+- **Equal MAFE/MSFE test**: David I. Harvey, Stephen J. Leybourne, Paul Newbold (1997). [*Testing the equality of prediction mean squared errors*](https://www.sciencedirect.com/science/article/abs/pii/S0169207096007194), International Journal of Forecasting, 13(2), 281-291.
+- **Forecast Encompassing test**: David I. Harvey, Stephen J. Leybourne, Paul Newbold (1998). [*Tests for Forecast Encompassing*](https://www.jstor.org/stable/1392581), Journal of Business & Economic Statistics, 16(2) , 254-259
 
 In addition to the above statistical tools, GTBpy introduces a new predictive index constructed from Google Trends data for a target variable. This methodology is inspired by the following study:
 
-- Stig V. Møller, Thomas Pedersen, Erik C. M. Schutte, Allan Timmermann (2023). [*Search and Predictability of Prices in the Housing Market*](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3805290), Management Science 70(1), 415-438.
+- **Google Trends**: Stig V. Møller, Thomas Pedersen, Erik C. M. Schutte, Allan Timmermann (2023). [*Search and Predictability of Prices in the Housing Market*](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=3805290), Management Science 70(1), 415-438.
 
 In this documentation, we first demonstrate the auto-regressive model
 GTBpy uses to forecast the target variable. Second, we detail the
@@ -317,7 +317,7 @@ time trend factor. Then, we study the residuals from this regression.
 
 $$(2)\ \ \ \ \ Y_{t} = c\  + \ \alpha*t + \sum_{i = 1}^{12}{\beta_{i}*d_{it}} + \varepsilon_{t}\ \overset{\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ }{\rightarrow}\ Y_{t}^{new}\  = \ \varepsilon_{t}$$
 
-### 4.2 Preprocess Google Trends data
+### 4.2 Preprocess Google Trends Data
 
 We transform the search indices as follows: First, to comply with
 changes in the HPI, we remove seasonality and trend in the same way.
@@ -522,7 +522,7 @@ is the length of the estimation sample, $\sigma_{d}$ is the standard
 deviation of d, and DM is the Diebold-Mariano statistic. MDM here
 follows $t(\tau - 1)$ distribution.
 
-# 6. UHSIs robustness to keyword selection
+# 6. UHSIs Robustness to Keyword Selection
 
 We evaluate the forecasting power of the selected predictors. We
 establish an autoregressive model without any exogenous variables as the
@@ -1544,7 +1544,7 @@ power of relevant keywords, the lack of forecasting capability in
 irrelevant keywords, and the ability of the forecasting algorithm to
 discern and utilize relevant keywords when mixed with irrelevant ones.
 
-**MAFE Improvement of HSIs in $B_h$ sets**
+**MAFE Improvement of HSIs in $B_h$ Sets**
 
 ``` python
 plot_improvement([G1_rel, G2_irr, G3_full], measure='MAFE')
