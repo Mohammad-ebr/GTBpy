@@ -8,10 +8,10 @@ with open(path.join(working_directory, 'README.md'), encoding='utf-8') as f:
 setup(
     name='GTBpy',
     version='0.0.1',
-    # url='https://github.com/yourname/yourproject',
+    url='https://github.com/Mohammad-ebr/GTBpy',
     author='Mohammad Ebrahimi',
     author_email='mohammad.ebrahimi.gtbpy@gmail.com',
-    description='Search index from Google Trends and bubble tests',
+    description='Search index from Google Trends, bubble tests, and forecast performance tests',
     long_description=long_description,
     long_description_content_type='text/markdown',
     packages=find_packages(),

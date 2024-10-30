@@ -1,5 +1,9 @@
 # Readme
 
+## Documentation
+
+The latest documentation can be found at <https://gtbpy.readthedocs.io/en/latest/>.
+
 **GTBpy** is a toolbox developed for the thesis [*"Predicting Housing Prices in Canada Using News Sentiments, Bubble Indicators, and Google Trends,"* authored by Mohammad Ebrahimi under the supervision of Simon van Norden and Vincent Grégoire (2024, HEC Montréal)](https://hecmontreal.on.worldcat.org/oclc/1458653247). This toolbox provides statistical tests for detecting financial bubbles and comparing forecast performance. Additionally, it introduces a novel predictive index derived from Google Trends data for a target variable.
 
 The financial bubble detection tests implemented in GTBpy are based on the following academic studies:
