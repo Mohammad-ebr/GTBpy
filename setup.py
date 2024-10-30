@@ -28,6 +28,5 @@ setup(
         'math',
         'ast',
         'IPython',
-        'itertools',
     ]
 )
