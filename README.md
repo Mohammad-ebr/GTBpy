@@ -12,7 +12,7 @@ The financial bubble detection tests implemented in GTBpy are based on the follo
   
 - **PWY (SADF) test**: Peter C.B. Phillips, Yangru Wu, and Jun Yu (2011). [*Explosive behavior in the 1990s Nasdaq: when did exuberance escalate stock values?*](https://onlinelibrary.wiley.com/doi/10.1111/j.1468-2354.2010.00625.x), International Economic Review, 52, 201-226.
 - **PSY (GSADF) test**: Peter C.B. Phillips, Shuping Shi, and Jun Yu (2015). [*Testing for Multiple Bubbles: Limit Theory of Real Time Detectors*](https://onlinelibrary.wiley.com/doi/full/10.1111/iere.12131), International Economic Review, 56, 1079-1134.
-- WHL test: Emily J. Whitehouse, David I. Harvey, and Stephen J. Leybourne (2023). [*Real‐Time Monitoring of Bubbles and Crashes*](https://onlinelibrary.wiley.com/doi/full/10.1111/obes.12540), Oxford Bulletin of Economics and Statistics, Department of Economics, University of Oxford, 85(3), 482-513.
+- **WHL test**: Emily J. Whitehouse, David I. Harvey, and Stephen J. Leybourne (2023). [*Real‐Time Monitoring of Bubbles and Crashes*](https://onlinelibrary.wiley.com/doi/full/10.1111/obes.12540), Oxford Bulletin of Economics and Statistics, Department of Economics, University of Oxford, 85(3), 482-513.
 
 GTBpy also includes statistical tests for comparing the performance of competing forecasts, based on the following papers:
 
